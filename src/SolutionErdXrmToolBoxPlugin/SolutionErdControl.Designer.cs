@@ -1,6 +1,6 @@
-namespace MyXrmToolBoxPlugin
+namespace SolutionErdXrmToolBoxPlugin
 {
-    partial class MyPluginControl
+    partial class SolutionErdControl
     {
         /// <summary>
         /// Required designer variable.
@@ -69,16 +69,16 @@ namespace MyXrmToolBoxPlugin
             this.txtResult.Size = new System.Drawing.Size(576, 306);
             this.txtResult.TabIndex = 2;
             //
-            // MyPluginControl
+            // SolutionErdControl
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.txtResult);
             this.Controls.Add(this.btnDoSomething);
             this.Controls.Add(this.lblStatus);
-            this.Name = "MyPluginControl";
+            this.Name = "SolutionErdControl";
             this.Size = new System.Drawing.Size(600, 412);
-            this.Load += new System.EventHandler(this.MyPluginControl_Load);
+            this.Load += new System.EventHandler(this.SolutionErdControl_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
         }

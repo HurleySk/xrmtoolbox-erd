@@ -1,0 +1,36 @@
+name: Build
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Restore dependencies
+        run: dotnet restore SolutionErd.sln
+
+      - name: Build
+        run: dotnet build SolutionErd.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test SolutionErd.sln --configuration Release --no-build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin
+          path: |
+            src/SolutionErdXrmToolBoxPlugin/bin/Release/net48/SolutionErdXrmToolBoxPlugin.dll
+            src/SolutionErdXrmToolBoxPlugin/bin/Release/net48/SolutionErd.Core.dll
+            src/SolutionErdXrmToolBoxPlugin/bin/Release/net48/AutomaticGraphLayout.dll

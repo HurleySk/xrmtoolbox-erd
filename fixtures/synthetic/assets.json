@@ -1,0 +1,1522 @@
+{
+  "source": "synthetic",
+  "solutionName": "ContosoAssets",
+  "solutionDisplayName": "Contoso Assets",
+  "capturedUtc": "2026-01-01T00:00:00Z",
+  "tables": [
+    {
+      "logicalName": "account",
+      "schemaName": "Account",
+      "displayName": "Account",
+      "primaryIdAttribute": "accountid",
+      "primaryNameAttribute": "name",
+      "inSolution": true,
+      "isCustom": false,
+      "isIntersect": false,
+      "isActivity": false,
+      "columns": [
+        {
+          "logicalName": "accountid",
+          "displayName": "Account",
+          "type": "Uniqueidentifier",
+          "isPrimaryId": true
+        },
+        {
+          "logicalName": "name",
+          "displayName": "Name",
+          "type": "String",
+          "isPrimaryName": true
+        }
+      ]
+    },
+    {
+      "logicalName": "activitypointer",
+      "schemaName": "Activitypointer",
+      "displayName": "Activity",
+      "primaryIdAttribute": "activityid",
+      "primaryNameAttribute": "subject",
+      "inSolution": false,
+      "isCustom": false,
+      "isIntersect": false,
+      "isActivity": true,
+      "columns": [
+        {
+          "logicalName": "activityid",
+          "displayName": "Activity",
+          "type": "Uniqueidentifier",
+          "isPrimaryId": true
+        },
+        {
+          "logicalName": "subject",
+          "displayName": "Name",
+          "type": "String",
+          "isPrimaryName": true
+        }
+      ]
+    },
+    {
+      "logicalName": "annotation",
+      "schemaName": "Annotation",
+      "displayName": "Note",
+      "primaryIdAttribute": "annotationid",
+      "primaryNameAttribute": "subject",
+      "inSolution": false,
+      "isCustom": false,
+      "isIntersect": false,
+      "isActivity": false,
+      "columns": [
+        {
+          "logicalName": "annotationid",
+          "displayName": "Note",
+          "type": "Uniqueidentifier",
+          "isPrimaryId": true
+        },
+        {
+          "logicalName": "subject",
+          "displayName": "Name",
+          "type": "String",
+          "isPrimaryName": true
+        }
+      ]
+    },
+    {
+      "logicalName": "businessunit",
+      "schemaName": "Businessunit",
+      "displayName": "Business Unit",
+      "primaryIdAttribute": "businessunitid",
+      "primaryNameAttribute": "name",
+      "inSolution": false,
+      "isCustom": false,
+      "isIntersect": false,
+      "isActivity": false,
+      "columns": [
+        {
+          "logicalName": "businessunitid",
+          "displayName": "Business Unit",
+          "type": "Uniqueidentifier",
+          "isPrimaryId": true
+        },
+        {
+          "logicalName": "name",
+          "displayName": "Name",
+          "type": "String",
+          "isPrimaryName": true
+        }
+      ]
+    },
+    {
+      "logicalName": "connection",
+      "schemaName": "Connection",
+      "displayName": "Connection",
+      "primaryIdAttribute": "connectionid",
+      "primaryNameAttribute": "name",
+      "inSolution": false,
+      "isCustom": false,
+      "isIntersect": false,
+      "isActivity": false,
+      "columns": [
+        {
+          "logicalName": "connectionid",
+          "displayName": "Connection",
+          "type": "Uniqueidentifier",
+          "isPrimaryId": true
+        },
+        {
+          "logicalName": "name",
+          "displayName": "Name",
+          "type": "String",
+          "isPrimaryName": true
+        }
+      ]
+    },
+    {
+      "logicalName": "contact",
+      "schemaName": "Contact",
+      "displayName": "Contact",
+      "primaryIdAttribute": "contactid",
+      "primaryNameAttribute": "fullname",
+      "inSolution": false,
+      "isCustom": false,
+      "isIntersect": false,
+      "isActivity": false,
+      "columns": [
+        {
+          "logicalName": "contactid",
+          "displayName": "Contact",
+          "type": "Uniqueidentifier",
+          "isPrimaryId": true
+        },
+        {
+          "logicalName": "fullname",
+          "displayName": "Name",
+          "type": "String",
+          "isPrimaryName": true
+        }
+      ]
+    },
+    {
+      "logicalName": "cp_asset",
+      "schemaName": "cp_asset",
+      "displayName": "Asset",
+      "primaryIdAttribute": "cp_assetid",
+      "primaryNameAttribute": "cp_name",
+      "inSolution": true,
+      "isCustom": true,
+      "isIntersect": false,
+      "isActivity": false,
+      "columns": [
+        {
+          "logicalName": "cp_assetid",
+          "displayName": "Asset",
+          "type": "Uniqueidentifier",
+          "isPrimaryId": true
+        },
+        {
+          "logicalName": "cp_name",
+          "displayName": "Name",
+          "type": "String",
+          "isCustom": true,
+          "isPrimaryName": true,
+          "isRequired": true
+        },
+        {
+          "logicalName": "cp_serial",
+          "displayName": "Serial Number",
+          "type": "String",
+          "isCustom": true
+        },
+        {
+          "logicalName": "createdby",
+          "displayName": "Created By",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "createdonbehalfby",
+          "displayName": "Created By (Delegate)",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "modifiedby",
+          "displayName": "Modified By",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "modifiedonbehalfby",
+          "displayName": "Modified By (Delegate)",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "ownerid",
+          "displayName": "Owner",
+          "type": "Owner",
+          "targets": [
+            "systemuser",
+            "team"
+          ]
+        },
+        {
+          "logicalName": "owninguser",
+          "displayName": "Owning User",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "owningteam",
+          "displayName": "Owning Team",
+          "type": "Lookup",
+          "targets": [
+            "team"
+          ]
+        },
+        {
+          "logicalName": "owningbusinessunit",
+          "displayName": "Owning Business Unit",
+          "type": "Lookup",
+          "targets": [
+            "businessunit"
+          ]
+        },
+        {
+          "logicalName": "transactioncurrencyid",
+          "displayName": "Currency",
+          "type": "Lookup",
+          "targets": [
+            "transactioncurrency"
+          ]
+        },
+        {
+          "logicalName": "cp_siteid",
+          "displayName": "Site",
+          "type": "Lookup",
+          "isCustom": true,
+          "targets": [
+            "cp_site"
+          ],
+          "isRequired": true
+        },
+        {
+          "logicalName": "cp_parentassetid",
+          "displayName": "Parent Asset",
+          "type": "Lookup",
+          "isCustom": true,
+          "targets": [
+            "cp_asset"
+          ]
+        }
+      ]
+    },
+    {
+      "logicalName": "cp_asset_part",
+      "schemaName": "cp_asset_part",
+      "displayName": "cp_asset_part",
+      "primaryIdAttribute": "cp_asset_partid",
+      "inSolution": true,
+      "isCustom": true,
+      "isIntersect": true,
+      "isActivity": false,
+      "columns": []
+    },
+    {
+      "logicalName": "cp_part",
+      "schemaName": "cp_part",
+      "displayName": "Part",
+      "primaryIdAttribute": "cp_partid",
+      "primaryNameAttribute": "cp_name",
+      "inSolution": true,
+      "isCustom": true,
+      "isIntersect": false,
+      "isActivity": false,
+      "columns": [
+        {
+          "logicalName": "cp_partid",
+          "displayName": "Part",
+          "type": "Uniqueidentifier",
+          "isPrimaryId": true
+        },
+        {
+          "logicalName": "cp_name",
+          "displayName": "Name",
+          "type": "String",
+          "isCustom": true,
+          "isPrimaryName": true,
+          "isRequired": true
+        },
+        {
+          "logicalName": "createdby",
+          "displayName": "Created By",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "createdonbehalfby",
+          "displayName": "Created By (Delegate)",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "modifiedby",
+          "displayName": "Modified By",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "modifiedonbehalfby",
+          "displayName": "Modified By (Delegate)",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "ownerid",
+          "displayName": "Owner",
+          "type": "Owner",
+          "targets": [
+            "systemuser",
+            "team"
+          ]
+        },
+        {
+          "logicalName": "owninguser",
+          "displayName": "Owning User",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "owningteam",
+          "displayName": "Owning Team",
+          "type": "Lookup",
+          "targets": [
+            "team"
+          ]
+        },
+        {
+          "logicalName": "owningbusinessunit",
+          "displayName": "Owning Business Unit",
+          "type": "Lookup",
+          "targets": [
+            "businessunit"
+          ]
+        },
+        {
+          "logicalName": "transactioncurrencyid",
+          "displayName": "Currency",
+          "type": "Lookup",
+          "targets": [
+            "transactioncurrency"
+          ]
+        }
+      ]
+    },
+    {
+      "logicalName": "cp_site",
+      "schemaName": "cp_site",
+      "displayName": "Site",
+      "primaryIdAttribute": "cp_siteid",
+      "primaryNameAttribute": "cp_name",
+      "inSolution": true,
+      "isCustom": true,
+      "isIntersect": false,
+      "isActivity": false,
+      "columns": [
+        {
+          "logicalName": "cp_siteid",
+          "displayName": "Site",
+          "type": "Uniqueidentifier",
+          "isPrimaryId": true
+        },
+        {
+          "logicalName": "cp_name",
+          "displayName": "Name",
+          "type": "String",
+          "isCustom": true,
+          "isPrimaryName": true,
+          "isRequired": true
+        },
+        {
+          "logicalName": "createdby",
+          "displayName": "Created By",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "createdonbehalfby",
+          "displayName": "Created By (Delegate)",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "modifiedby",
+          "displayName": "Modified By",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "modifiedonbehalfby",
+          "displayName": "Modified By (Delegate)",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "ownerid",
+          "displayName": "Owner",
+          "type": "Owner",
+          "targets": [
+            "systemuser",
+            "team"
+          ]
+        },
+        {
+          "logicalName": "owninguser",
+          "displayName": "Owning User",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "owningteam",
+          "displayName": "Owning Team",
+          "type": "Lookup",
+          "targets": [
+            "team"
+          ]
+        },
+        {
+          "logicalName": "owningbusinessunit",
+          "displayName": "Owning Business Unit",
+          "type": "Lookup",
+          "targets": [
+            "businessunit"
+          ]
+        },
+        {
+          "logicalName": "transactioncurrencyid",
+          "displayName": "Currency",
+          "type": "Lookup",
+          "targets": [
+            "transactioncurrency"
+          ]
+        },
+        {
+          "logicalName": "cp_ownerorgid",
+          "displayName": "Owner Organisation",
+          "type": "Lookup",
+          "isCustom": true,
+          "targets": [
+            "account"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "logicalName": "cp_workorder",
+      "schemaName": "cp_workorder",
+      "displayName": "Work Order",
+      "primaryIdAttribute": "cp_workorderid",
+      "primaryNameAttribute": "cp_name",
+      "inSolution": true,
+      "isCustom": true,
+      "isIntersect": false,
+      "isActivity": false,
+      "columns": [
+        {
+          "logicalName": "cp_workorderid",
+          "displayName": "Work Order",
+          "type": "Uniqueidentifier",
+          "isPrimaryId": true
+        },
+        {
+          "logicalName": "cp_name",
+          "displayName": "Name",
+          "type": "String",
+          "isCustom": true,
+          "isPrimaryName": true,
+          "isRequired": true
+        },
+        {
+          "logicalName": "createdby",
+          "displayName": "Created By",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "createdonbehalfby",
+          "displayName": "Created By (Delegate)",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "modifiedby",
+          "displayName": "Modified By",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "modifiedonbehalfby",
+          "displayName": "Modified By (Delegate)",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "ownerid",
+          "displayName": "Owner",
+          "type": "Owner",
+          "targets": [
+            "systemuser",
+            "team"
+          ]
+        },
+        {
+          "logicalName": "owninguser",
+          "displayName": "Owning User",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "owningteam",
+          "displayName": "Owning Team",
+          "type": "Lookup",
+          "targets": [
+            "team"
+          ]
+        },
+        {
+          "logicalName": "owningbusinessunit",
+          "displayName": "Owning Business Unit",
+          "type": "Lookup",
+          "targets": [
+            "businessunit"
+          ]
+        },
+        {
+          "logicalName": "transactioncurrencyid",
+          "displayName": "Currency",
+          "type": "Lookup",
+          "targets": [
+            "transactioncurrency"
+          ]
+        },
+        {
+          "logicalName": "cp_assetid",
+          "displayName": "Asset",
+          "type": "Lookup",
+          "isCustom": true,
+          "targets": [
+            "cp_asset"
+          ],
+          "isRequired": true
+        },
+        {
+          "logicalName": "cp_siteid",
+          "displayName": "Site",
+          "type": "Lookup",
+          "isCustom": true,
+          "targets": [
+            "cp_site"
+          ]
+        },
+        {
+          "logicalName": "cp_requestedbyid",
+          "displayName": "Requested By",
+          "type": "Customer",
+          "isCustom": true,
+          "targets": [
+            "account",
+            "contact"
+          ]
+        },
+        {
+          "logicalName": "cp_technicianid",
+          "displayName": "Technician",
+          "type": "Lookup",
+          "isCustom": true,
+          "targets": [
+            "systemuser"
+          ]
+        }
+      ]
+    },
+    {
+      "logicalName": "cp_workorderpart",
+      "schemaName": "cp_workorderpart",
+      "displayName": "Work Order Part",
+      "primaryIdAttribute": "cp_workorderpartid",
+      "primaryNameAttribute": "cp_name",
+      "inSolution": true,
+      "isCustom": true,
+      "isIntersect": false,
+      "isActivity": false,
+      "columns": [
+        {
+          "logicalName": "cp_workorderpartid",
+          "displayName": "Work Order Part",
+          "type": "Uniqueidentifier",
+          "isPrimaryId": true
+        },
+        {
+          "logicalName": "cp_name",
+          "displayName": "Name",
+          "type": "String",
+          "isCustom": true,
+          "isPrimaryName": true,
+          "isRequired": true
+        },
+        {
+          "logicalName": "createdby",
+          "displayName": "Created By",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "createdonbehalfby",
+          "displayName": "Created By (Delegate)",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "modifiedby",
+          "displayName": "Modified By",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "modifiedonbehalfby",
+          "displayName": "Modified By (Delegate)",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "ownerid",
+          "displayName": "Owner",
+          "type": "Owner",
+          "targets": [
+            "systemuser",
+            "team"
+          ]
+        },
+        {
+          "logicalName": "owninguser",
+          "displayName": "Owning User",
+          "type": "Lookup",
+          "targets": [
+            "systemuser"
+          ]
+        },
+        {
+          "logicalName": "owningteam",
+          "displayName": "Owning Team",
+          "type": "Lookup",
+          "targets": [
+            "team"
+          ]
+        },
+        {
+          "logicalName": "owningbusinessunit",
+          "displayName": "Owning Business Unit",
+          "type": "Lookup",
+          "targets": [
+            "businessunit"
+          ]
+        },
+        {
+          "logicalName": "transactioncurrencyid",
+          "displayName": "Currency",
+          "type": "Lookup",
+          "targets": [
+            "transactioncurrency"
+          ]
+        },
+        {
+          "logicalName": "cp_workorderid",
+          "displayName": "Work Order",
+          "type": "Lookup",
+          "isCustom": true,
+          "targets": [
+            "cp_workorder"
+          ],
+          "isRequired": true
+        },
+        {
+          "logicalName": "cp_partid",
+          "displayName": "Part",
+          "type": "Lookup",
+          "isCustom": true,
+          "targets": [
+            "cp_part"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "logicalName": "systemuser",
+      "schemaName": "Systemuser",
+      "displayName": "User",
+      "primaryIdAttribute": "systemuserid",
+      "primaryNameAttribute": "fullname",
+      "inSolution": false,
+      "isCustom": false,
+      "isIntersect": false,
+      "isActivity": false,
+      "columns": [
+        {
+          "logicalName": "systemuserid",
+          "displayName": "User",
+          "type": "Uniqueidentifier",
+          "isPrimaryId": true
+        },
+        {
+          "logicalName": "fullname",
+          "displayName": "Name",
+          "type": "String",
+          "isPrimaryName": true
+        }
+      ]
+    },
+    {
+      "logicalName": "team",
+      "schemaName": "Team",
+      "displayName": "Team",
+      "primaryIdAttribute": "teamid",
+      "primaryNameAttribute": "name",
+      "inSolution": false,
+      "isCustom": false,
+      "isIntersect": false,
+      "isActivity": false,
+      "columns": [
+        {
+          "logicalName": "teamid",
+          "displayName": "Team",
+          "type": "Uniqueidentifier",
+          "isPrimaryId": true
+        },
+        {
+          "logicalName": "name",
+          "displayName": "Name",
+          "type": "String",
+          "isPrimaryName": true
+        }
+      ]
+    },
+    {
+      "logicalName": "transactioncurrency",
+      "schemaName": "Transactioncurrency",
+      "displayName": "Currency",
+      "primaryIdAttribute": "transactioncurrencyid",
+      "primaryNameAttribute": "currencyname",
+      "inSolution": false,
+      "isCustom": false,
+      "isIntersect": false,
+      "isActivity": false,
+      "columns": [
+        {
+          "logicalName": "transactioncurrencyid",
+          "displayName": "Currency",
+          "type": "Uniqueidentifier",
+          "isPrimaryId": true
+        },
+        {
+          "logicalName": "currencyname",
+          "displayName": "Name",
+          "type": "String",
+          "isPrimaryName": true
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "schemaName": "account_cp_site_cp_ownerorgid",
+      "kind": "OneToMany",
+      "parentTable": "account",
+      "parentColumn": "accountid",
+      "childTable": "cp_site",
+      "childColumn": "cp_ownerorgid",
+      "isCustom": true
+    },
+    {
+      "schemaName": "account_cp_workorder_cp_requestedbyid",
+      "kind": "OneToMany",
+      "parentTable": "account",
+      "parentColumn": "accountid",
+      "childTable": "cp_workorder",
+      "childColumn": "cp_requestedbyid",
+      "isCustom": true
+    },
+    {
+      "schemaName": "businessunit_cp_asset_owningbusinessunit",
+      "kind": "OneToMany",
+      "parentTable": "businessunit",
+      "parentColumn": "businessunitid",
+      "childTable": "cp_asset",
+      "childColumn": "owningbusinessunit",
+      "isCustom": false
+    },
+    {
+      "schemaName": "businessunit_cp_part_owningbusinessunit",
+      "kind": "OneToMany",
+      "parentTable": "businessunit",
+      "parentColumn": "businessunitid",
+      "childTable": "cp_part",
+      "childColumn": "owningbusinessunit",
+      "isCustom": false
+    },
+    {
+      "schemaName": "businessunit_cp_site_owningbusinessunit",
+      "kind": "OneToMany",
+      "parentTable": "businessunit",
+      "parentColumn": "businessunitid",
+      "childTable": "cp_site",
+      "childColumn": "owningbusinessunit",
+      "isCustom": false
+    },
+    {
+      "schemaName": "businessunit_cp_workorder_owningbusinessunit",
+      "kind": "OneToMany",
+      "parentTable": "businessunit",
+      "parentColumn": "businessunitid",
+      "childTable": "cp_workorder",
+      "childColumn": "owningbusinessunit",
+      "isCustom": false
+    },
+    {
+      "schemaName": "businessunit_cp_workorderpart_owningbusinessunit",
+      "kind": "OneToMany",
+      "parentTable": "businessunit",
+      "parentColumn": "businessunitid",
+      "childTable": "cp_workorderpart",
+      "childColumn": "owningbusinessunit",
+      "isCustom": false
+    },
+    {
+      "schemaName": "contact_cp_workorder_cp_requestedbyid",
+      "kind": "OneToMany",
+      "parentTable": "contact",
+      "parentColumn": "contactid",
+      "childTable": "cp_workorder",
+      "childColumn": "cp_requestedbyid",
+      "isCustom": true
+    },
+    {
+      "schemaName": "cp_asset_activitypointer_regardingobjectid",
+      "kind": "OneToMany",
+      "parentTable": "cp_asset",
+      "parentColumn": "cp_assetid",
+      "childTable": "activitypointer",
+      "childColumn": "regardingobjectid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "cp_asset_annotation_objectid",
+      "kind": "OneToMany",
+      "parentTable": "cp_asset",
+      "parentColumn": "cp_assetid",
+      "childTable": "annotation",
+      "childColumn": "objectid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "cp_asset_connection_record1id",
+      "kind": "OneToMany",
+      "parentTable": "cp_asset",
+      "parentColumn": "cp_assetid",
+      "childTable": "connection",
+      "childColumn": "record1id",
+      "isCustom": false
+    },
+    {
+      "schemaName": "cp_asset_cp_asset_cp_parentassetid",
+      "kind": "OneToMany",
+      "parentTable": "cp_asset",
+      "parentColumn": "cp_assetid",
+      "childTable": "cp_asset",
+      "childColumn": "cp_parentassetid",
+      "isCustom": true
+    },
+    {
+      "schemaName": "cp_asset_cp_workorder_cp_assetid",
+      "kind": "OneToMany",
+      "parentTable": "cp_asset",
+      "parentColumn": "cp_assetid",
+      "childTable": "cp_workorder",
+      "childColumn": "cp_assetid",
+      "isCustom": true
+    },
+    {
+      "schemaName": "cp_asset_part",
+      "kind": "ManyToMany",
+      "parentTable": "cp_asset",
+      "childTable": "cp_part",
+      "intersectTable": "cp_asset_part",
+      "isCustom": true
+    },
+    {
+      "schemaName": "cp_part_activitypointer_regardingobjectid",
+      "kind": "OneToMany",
+      "parentTable": "cp_part",
+      "parentColumn": "cp_partid",
+      "childTable": "activitypointer",
+      "childColumn": "regardingobjectid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "cp_part_annotation_objectid",
+      "kind": "OneToMany",
+      "parentTable": "cp_part",
+      "parentColumn": "cp_partid",
+      "childTable": "annotation",
+      "childColumn": "objectid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "cp_part_connection_record1id",
+      "kind": "OneToMany",
+      "parentTable": "cp_part",
+      "parentColumn": "cp_partid",
+      "childTable": "connection",
+      "childColumn": "record1id",
+      "isCustom": false
+    },
+    {
+      "schemaName": "cp_part_cp_workorderpart_cp_partid",
+      "kind": "OneToMany",
+      "parentTable": "cp_part",
+      "parentColumn": "cp_partid",
+      "childTable": "cp_workorderpart",
+      "childColumn": "cp_partid",
+      "isCustom": true
+    },
+    {
+      "schemaName": "cp_site_activitypointer_regardingobjectid",
+      "kind": "OneToMany",
+      "parentTable": "cp_site",
+      "parentColumn": "cp_siteid",
+      "childTable": "activitypointer",
+      "childColumn": "regardingobjectid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "cp_site_annotation_objectid",
+      "kind": "OneToMany",
+      "parentTable": "cp_site",
+      "parentColumn": "cp_siteid",
+      "childTable": "annotation",
+      "childColumn": "objectid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "cp_site_connection_record1id",
+      "kind": "OneToMany",
+      "parentTable": "cp_site",
+      "parentColumn": "cp_siteid",
+      "childTable": "connection",
+      "childColumn": "record1id",
+      "isCustom": false
+    },
+    {
+      "schemaName": "cp_site_cp_asset_cp_siteid",
+      "kind": "OneToMany",
+      "parentTable": "cp_site",
+      "parentColumn": "cp_siteid",
+      "childTable": "cp_asset",
+      "childColumn": "cp_siteid",
+      "isCustom": true
+    },
+    {
+      "schemaName": "cp_site_cp_workorder_cp_siteid",
+      "kind": "OneToMany",
+      "parentTable": "cp_site",
+      "parentColumn": "cp_siteid",
+      "childTable": "cp_workorder",
+      "childColumn": "cp_siteid",
+      "isCustom": true
+    },
+    {
+      "schemaName": "cp_workorder_activitypointer_regardingobjectid",
+      "kind": "OneToMany",
+      "parentTable": "cp_workorder",
+      "parentColumn": "cp_workorderid",
+      "childTable": "activitypointer",
+      "childColumn": "regardingobjectid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "cp_workorder_annotation_objectid",
+      "kind": "OneToMany",
+      "parentTable": "cp_workorder",
+      "parentColumn": "cp_workorderid",
+      "childTable": "annotation",
+      "childColumn": "objectid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "cp_workorder_connection_record1id",
+      "kind": "OneToMany",
+      "parentTable": "cp_workorder",
+      "parentColumn": "cp_workorderid",
+      "childTable": "connection",
+      "childColumn": "record1id",
+      "isCustom": false
+    },
+    {
+      "schemaName": "cp_workorder_cp_workorderpart_cp_workorderid",
+      "kind": "OneToMany",
+      "parentTable": "cp_workorder",
+      "parentColumn": "cp_workorderid",
+      "childTable": "cp_workorderpart",
+      "childColumn": "cp_workorderid",
+      "isCustom": true
+    },
+    {
+      "schemaName": "cp_workorderpart_activitypointer_regardingobjectid",
+      "kind": "OneToMany",
+      "parentTable": "cp_workorderpart",
+      "parentColumn": "cp_workorderpartid",
+      "childTable": "activitypointer",
+      "childColumn": "regardingobjectid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "cp_workorderpart_annotation_objectid",
+      "kind": "OneToMany",
+      "parentTable": "cp_workorderpart",
+      "parentColumn": "cp_workorderpartid",
+      "childTable": "annotation",
+      "childColumn": "objectid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "cp_workorderpart_connection_record1id",
+      "kind": "OneToMany",
+      "parentTable": "cp_workorderpart",
+      "parentColumn": "cp_workorderpartid",
+      "childTable": "connection",
+      "childColumn": "record1id",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_asset_createdby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_asset",
+      "childColumn": "createdby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_asset_createdonbehalfby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_asset",
+      "childColumn": "createdonbehalfby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_asset_modifiedby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_asset",
+      "childColumn": "modifiedby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_asset_modifiedonbehalfby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_asset",
+      "childColumn": "modifiedonbehalfby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_asset_ownerid",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_asset",
+      "childColumn": "ownerid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_asset_owninguser",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_asset",
+      "childColumn": "owninguser",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_part_createdby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_part",
+      "childColumn": "createdby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_part_createdonbehalfby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_part",
+      "childColumn": "createdonbehalfby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_part_modifiedby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_part",
+      "childColumn": "modifiedby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_part_modifiedonbehalfby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_part",
+      "childColumn": "modifiedonbehalfby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_part_ownerid",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_part",
+      "childColumn": "ownerid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_part_owninguser",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_part",
+      "childColumn": "owninguser",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_site_createdby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_site",
+      "childColumn": "createdby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_site_createdonbehalfby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_site",
+      "childColumn": "createdonbehalfby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_site_modifiedby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_site",
+      "childColumn": "modifiedby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_site_modifiedonbehalfby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_site",
+      "childColumn": "modifiedonbehalfby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_site_ownerid",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_site",
+      "childColumn": "ownerid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_site_owninguser",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_site",
+      "childColumn": "owninguser",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_workorder_cp_technicianid",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_workorder",
+      "childColumn": "cp_technicianid",
+      "isCustom": true
+    },
+    {
+      "schemaName": "systemuser_cp_workorder_createdby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_workorder",
+      "childColumn": "createdby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_workorder_createdonbehalfby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_workorder",
+      "childColumn": "createdonbehalfby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_workorder_modifiedby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_workorder",
+      "childColumn": "modifiedby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_workorder_modifiedonbehalfby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_workorder",
+      "childColumn": "modifiedonbehalfby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_workorder_ownerid",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_workorder",
+      "childColumn": "ownerid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_workorder_owninguser",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_workorder",
+      "childColumn": "owninguser",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_workorderpart_createdby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_workorderpart",
+      "childColumn": "createdby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_workorderpart_createdonbehalfby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_workorderpart",
+      "childColumn": "createdonbehalfby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_workorderpart_modifiedby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_workorderpart",
+      "childColumn": "modifiedby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_workorderpart_modifiedonbehalfby",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_workorderpart",
+      "childColumn": "modifiedonbehalfby",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_workorderpart_ownerid",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_workorderpart",
+      "childColumn": "ownerid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "systemuser_cp_workorderpart_owninguser",
+      "kind": "OneToMany",
+      "parentTable": "systemuser",
+      "parentColumn": "systemuserid",
+      "childTable": "cp_workorderpart",
+      "childColumn": "owninguser",
+      "isCustom": false
+    },
+    {
+      "schemaName": "team_cp_asset_ownerid",
+      "kind": "OneToMany",
+      "parentTable": "team",
+      "parentColumn": "teamid",
+      "childTable": "cp_asset",
+      "childColumn": "ownerid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "team_cp_asset_owningteam",
+      "kind": "OneToMany",
+      "parentTable": "team",
+      "parentColumn": "teamid",
+      "childTable": "cp_asset",
+      "childColumn": "owningteam",
+      "isCustom": false
+    },
+    {
+      "schemaName": "team_cp_part_ownerid",
+      "kind": "OneToMany",
+      "parentTable": "team",
+      "parentColumn": "teamid",
+      "childTable": "cp_part",
+      "childColumn": "ownerid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "team_cp_part_owningteam",
+      "kind": "OneToMany",
+      "parentTable": "team",
+      "parentColumn": "teamid",
+      "childTable": "cp_part",
+      "childColumn": "owningteam",
+      "isCustom": false
+    },
+    {
+      "schemaName": "team_cp_site_ownerid",
+      "kind": "OneToMany",
+      "parentTable": "team",
+      "parentColumn": "teamid",
+      "childTable": "cp_site",
+      "childColumn": "ownerid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "team_cp_site_owningteam",
+      "kind": "OneToMany",
+      "parentTable": "team",
+      "parentColumn": "teamid",
+      "childTable": "cp_site",
+      "childColumn": "owningteam",
+      "isCustom": false
+    },
+    {
+      "schemaName": "team_cp_workorder_ownerid",
+      "kind": "OneToMany",
+      "parentTable": "team",
+      "parentColumn": "teamid",
+      "childTable": "cp_workorder",
+      "childColumn": "ownerid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "team_cp_workorder_owningteam",
+      "kind": "OneToMany",
+      "parentTable": "team",
+      "parentColumn": "teamid",
+      "childTable": "cp_workorder",
+      "childColumn": "owningteam",
+      "isCustom": false
+    },
+    {
+      "schemaName": "team_cp_workorderpart_ownerid",
+      "kind": "OneToMany",
+      "parentTable": "team",
+      "parentColumn": "teamid",
+      "childTable": "cp_workorderpart",
+      "childColumn": "ownerid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "team_cp_workorderpart_owningteam",
+      "kind": "OneToMany",
+      "parentTable": "team",
+      "parentColumn": "teamid",
+      "childTable": "cp_workorderpart",
+      "childColumn": "owningteam",
+      "isCustom": false
+    },
+    {
+      "schemaName": "transactioncurrency_cp_asset_transactioncurrencyid",
+      "kind": "OneToMany",
+      "parentTable": "transactioncurrency",
+      "parentColumn": "transactioncurrencyid",
+      "childTable": "cp_asset",
+      "childColumn": "transactioncurrencyid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "transactioncurrency_cp_part_transactioncurrencyid",
+      "kind": "OneToMany",
+      "parentTable": "transactioncurrency",
+      "parentColumn": "transactioncurrencyid",
+      "childTable": "cp_part",
+      "childColumn": "transactioncurrencyid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "transactioncurrency_cp_site_transactioncurrencyid",
+      "kind": "OneToMany",
+      "parentTable": "transactioncurrency",
+      "parentColumn": "transactioncurrencyid",
+      "childTable": "cp_site",
+      "childColumn": "transactioncurrencyid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "transactioncurrency_cp_workorder_transactioncurrencyid",
+      "kind": "OneToMany",
+      "parentTable": "transactioncurrency",
+      "parentColumn": "transactioncurrencyid",
+      "childTable": "cp_workorder",
+      "childColumn": "transactioncurrencyid",
+      "isCustom": false
+    },
+    {
+      "schemaName": "transactioncurrency_cp_workorderpart_transactioncurrencyid",
+      "kind": "OneToMany",
+      "parentTable": "transactioncurrency",
+      "parentColumn": "transactioncurrencyid",
+      "childTable": "cp_workorderpart",
+      "childColumn": "transactioncurrencyid",
+      "isCustom": false
+    }
+  ]
+}

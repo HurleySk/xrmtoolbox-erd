@@ -9,12 +9,13 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-# File list - add your plugin's DLL and any extra dependency DLLs here
+# The plugin DLL and the dependency DLLs that XrmToolBox doesn't already ship
 $pluginFiles = @(
-    "MyXrmToolBoxPlugin.dll",
-    "MyXrmToolBoxPlugin.pdb"
-    # Add extra dependency DLLs here, for example:
-    # "CsvHelper.dll"
+    "SolutionErdXrmToolBoxPlugin.dll",
+    "SolutionErdXrmToolBoxPlugin.pdb",
+    "SolutionErd.Core.dll",
+    "SolutionErd.Core.pdb",
+    "AutomaticGraphLayout.dll"
 )
 
 # NuGet dependency DLLs that need to be copied from the NuGet cache.
@@ -76,8 +77,8 @@ if (-not $SkipBuild) {
         Write-Host "  [WhatIf] Would run: dotnet build" -ForegroundColor Gray
     }
     else {
-        dotnet clean MyXrmToolBoxPlugin.sln --configuration Release --verbosity quiet
-        dotnet build MyXrmToolBoxPlugin.sln --configuration Release
+        dotnet clean SolutionErd.sln --configuration Release --verbosity quiet
+        dotnet build SolutionErd.sln --configuration Release
 
         if ($LASTEXITCODE -ne 0) {
             Write-Host "`nBuild failed!" -ForegroundColor Red
@@ -91,9 +92,9 @@ else {
 }
 
 # Verify build output exists
-$buildPath = "bin\Release\net48"
-if (-not (Test-Path "$buildPath\MyXrmToolBoxPlugin.dll")) {
-    Write-Host "`nError: Build output not found at $buildPath\MyXrmToolBoxPlugin.dll" -ForegroundColor Red
+$buildPath = Join-Path $PSScriptRoot "src\SolutionErdXrmToolBoxPlugin\bin\Release\net48"
+if (-not (Test-Path "$buildPath\SolutionErdXrmToolBoxPlugin.dll")) {
+    Write-Host "`nError: Build output not found at $buildPath\SolutionErdXrmToolBoxPlugin.dll" -ForegroundColor Red
     exit 1
 }
 
@@ -136,7 +137,8 @@ function Remove-PluginFiles {
     Write-Host "  - Cleaning $Location..." -ForegroundColor Gray
 
     $filesToRemove = @(
-        "$Path\MyXrmToolBoxPlugin*"
+        "$Path\SolutionErdXrmToolBoxPlugin*",
+        "$Path\SolutionErd.Core*"
     )
 
     foreach ($filePattern in $filesToRemove) {
@@ -328,7 +330,7 @@ if ($allFilesPresent -and -not $deploymentFailed) {
         Write-Host "`nNext steps:" -ForegroundColor Yellow
         Write-Host "  1. Start XRM ToolBox" -ForegroundColor White
         Write-Host "  2. Connect to your environment" -ForegroundColor White
-        Write-Host "  3. Look for 'My XrmToolBox Plugin' in Tools menu" -ForegroundColor White
+        Write-Host "  3. Look for 'Solution ERD Builder' in Tools menu" -ForegroundColor White
     }
 
     exit 0

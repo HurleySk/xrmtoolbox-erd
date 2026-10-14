@@ -5,16 +5,16 @@ using System;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
-namespace MyXrmToolBoxPlugin
+namespace SolutionErdXrmToolBoxPlugin
 {
-    public partial class MyPluginControl : PluginControlBase
+    public partial class SolutionErdControl : PluginControlBase
     {
-        public MyPluginControl()
+        public SolutionErdControl()
         {
             InitializeComponent();
         }
 
-        private void MyPluginControl_Load(object sender, EventArgs e)
+        private void SolutionErdControl_Load(object sender, EventArgs e)
         {
             UpdateConnectionState();
         }

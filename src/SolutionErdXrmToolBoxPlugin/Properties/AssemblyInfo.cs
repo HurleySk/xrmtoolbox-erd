@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("My XrmToolBox Plugin")]
-[assembly: AssemblyDescription("TODO: Describe your XrmToolBox plugin")]
+[assembly: AssemblyTitle("Solution ERD Builder")]
+[assembly: AssemblyDescription("Draws readable ERDs of the tables in a Dataverse solution and exports them to draw.io and Visio.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("YOUR_COMPANY")]
-[assembly: AssemblyProduct("MyXrmToolBoxPlugin")]
-[assembly: AssemblyCopyright("Copyright (c) YOUR_NAME 2026")]
+[assembly: AssemblyCompany("Procentrix")]
+[assembly: AssemblyProduct("SolutionErdXrmToolBoxPlugin")]
+[assembly: AssemblyCopyright("Copyright (c) Samuel Hurley 2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,9 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-// TODO: Generate a new GUID for your plugin:
-//   PowerShell: [guid]::NewGuid().ToString()
-[assembly: Guid("A1B2C3D4-E5F6-7890-ABCD-EF1234567890")]
+[assembly: Guid("9FE4C9BB-69F0-4109-A7BC-7CC0C45A82F7")]
 
 // Version information for an assembly consists of the following four values:
 //

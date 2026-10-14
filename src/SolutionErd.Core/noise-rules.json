@@ -1,0 +1,21 @@
+{
+  "systemLookupColumns": [
+    "createdby", "createdonbehalfby", "modifiedby", "modifiedonbehalfby",
+    "createdbyexternalparty", "modifiedbyexternalparty",
+    "ownerid", "owninguser", "owningteam", "owningbusinessunit",
+    "transactioncurrencyid", "organizationid",
+    "processid", "stageid", "slaid", "slainvokedid",
+    "masterid", "regardingobjectid", "objectid"
+  ],
+  "systemTables": [
+    "activitypointer", "activityparty", "annotation", "asyncoperation", "bulkdeletefailure",
+    "connection", "duplicaterecord", "mailboxtrackingfolder", "principalobjectattributeaccess",
+    "processsession", "syncerror", "userentityinstancedata", "postfollow", "postregarding",
+    "postrole", "sharepointdocumentlocation", "sharepointdocument", "socialactivity",
+    "transactioncurrency", "organization", "sla", "slakpiinstance", "processstage", "workflow",
+    "queueitem", "fileattachment", "msdyn_richtextfile", "flowsession"
+  ],
+  "coreHubTables": [
+    "account", "contact", "systemuser", "team", "businessunit"
+  ]
+}
