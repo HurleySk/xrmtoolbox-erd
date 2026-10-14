@@ -132,13 +132,18 @@ namespace SolutionErd.Writers
             var toRow = to.Rows.FindIndex(r => r.Name == edge.ToRow);
             var source = fromRow >= 0 ? RowId(pageId + "-" + from.Id, fromRow) : pageId + "-" + from.Id;
             var target = toRow >= 0 ? RowId(pageId + "-" + to.Id, toRow) : pageId + "-" + to.Id;
-            var exitY = fromRow >= 0 ? 0.5 : (edge.Points[0].Y - from.Y) / from.Height;
-            var entryY = toRow >= 0 ? 0.5 : (edge.Points[edge.Points.Count - 1].Y - to.Y) / to.Height;
+            var first = edge.Points[0];
+            var last = edge.Points[edge.Points.Count - 1];
+            var exitX = fromRow >= 0 ? (edge.FromRight ? 1 : 0) : Fraction(first.X - from.X, from.Width);
+            var exitY = fromRow >= 0 ? 0.5 : Fraction(first.Y - from.Y, from.Height);
+            var entryX = toRow >= 0 ? (edge.ToRight ? 1 : 0) : Fraction(last.X - to.X, to.Width);
+            var entryY = toRow >= 0 ? 0.5 : Fraction(last.Y - to.Y, to.Height);
 
-            var style = "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4D4D4D;" +
+            var style = (edge.Straight ? "edgeStyle=none;" : "edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=auto;") +
+                        "rounded=0;html=1;strokeColor=#4D4D4D;" +
                         "startArrow=" + Arrow(edge.StartMark) + ";startFill=0;endArrow=" + Arrow(edge.EndMark) + ";endFill=0;" +
-                        "exitX=" + (edge.FromRight ? "1" : "0") + ";exitY=" + Num(exitY) + ";exitDx=0;exitDy=0;" +
-                        "entryX=" + (edge.ToRight ? "1" : "0") + ";entryY=" + Num(entryY) + ";entryDx=0;entryDy=0;" +
+                        "exitX=" + Num(exitX) + ";exitY=" + Num(exitY) + ";exitDx=0;exitDy=0;" +
+                        "entryX=" + Num(entryX) + ";entryY=" + Num(entryY) + ";entryDx=0;entryDy=0;" +
                         "fontSize=10;fontStyle=1;labelBackgroundColor=#FFFFFF;" + Font;
 
             w.WriteStartElement("mxCell");
@@ -172,6 +177,8 @@ namespace SolutionErd.Writers
         }
 
         static string RowId(string boxId, int row) => boxId + "-r" + row;
+
+        static double Fraction(double offset, double size) => size <= 0 ? 0.5 : Math.Max(0, Math.Min(1, offset / size));
 
         static string Arrow(EndMark mark)
         {

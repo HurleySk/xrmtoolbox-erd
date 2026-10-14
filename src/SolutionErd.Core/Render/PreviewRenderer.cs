@@ -144,10 +144,12 @@ namespace SolutionErd.Render
 
             if (!string.IsNullOrEmpty(edge.Label))
             {
-                var (a, b) = Enumerable.Range(0, points.Length - 1)
-                    .Select(i => (points[i], points[i + 1]))
-                    .OrderByDescending(s => Math.Abs(s.Item1.X - s.Item2.X) + Math.Abs(s.Item1.Y - s.Item2.Y))
-                    .First();
+                var (a, b) = edge.Straight
+                    ? (points[(points.Length - 1) / 2], points[(points.Length - 1) / 2 + 1])
+                    : Enumerable.Range(0, points.Length - 1)
+                        .Select(i => (points[i], points[i + 1]))
+                        .OrderByDescending(s => Math.Abs(s.Item1.X - s.Item2.X) + Math.Abs(s.Item1.Y - s.Item2.Y))
+                        .First();
                 var mid = new PointF((a.X + b.X) / 2, (a.Y + b.Y) / 2);
                 using (var font = new Font(ErdStyle.FontFamily, 10f, FontStyle.Bold, GraphicsUnit.Pixel))
                 using (var brush = new SolidBrush(TitleText))

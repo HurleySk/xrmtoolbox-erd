@@ -292,11 +292,13 @@ namespace SolutionErd
                 areaOf[pageNames[p]] = area.Name;
             }
 
+            // One line per pair of areas, whichever way the lookups go, labelled with how many there are.
             var counts = new Dictionary<(string child, string parent), int>();
             foreach (var e in model.Edges.Where(e => !e.IsSelf))
             {
                 if (!homePage.TryGetValue(e.ChildTable, out var cp) || !homePage.TryGetValue(e.ParentTable, out var pp) || cp == pp) continue;
-                var key = (areaOf[cp], areaOf[pp]);
+                var (x, y) = (areaOf[cp], areaOf[pp]);
+                var key = string.CompareOrdinal(x, y) < 0 ? (x, y) : (y, x);
                 counts.TryGetValue(key, out var c);
                 counts[key] = c + 1;
             }

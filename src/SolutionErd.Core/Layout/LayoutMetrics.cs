@@ -17,6 +17,12 @@ namespace SolutionErd.Layout
         public int BoxHits { get; set; }
 
         public double Length { get; set; }
+
+        /// <summary>
+        /// Length where two different lines run on top of each other. Shared runs hide which line goes where,
+        /// and <see cref="Crossings"/> doesn't see them. Not in <see cref="Score"/>, so older runs stay comparable.
+        /// </summary>
+        public double Overlap { get; set; }
         public double Width { get; set; }
         public double Height { get; set; }
 
@@ -25,7 +31,7 @@ namespace SolutionErd.Layout
 
         public override string ToString() =>
             $"{Page}: boxes {Boxes}, edges {Edges}, crossings {Crossings}, bends {Bends}, box hits {BoxHits}, " +
-            $"length {Length:0}, size {Width:0}x{Height:0}, score {Score:0.0}";
+            $"overlap {Overlap:0}, length {Length:0}, size {Width:0}x{Height:0}, score {Score:0.0}";
     }
 
     public static class LayoutMetrics
@@ -54,6 +60,7 @@ namespace SolutionErd.Layout
                         foreach (var b in segments[j])
                         {
                             if (Cross(a, b)) score.Crossings++;
+                            score.Overlap += Shared(a, b);
                         }
                     }
                 }
@@ -101,7 +108,28 @@ namespace SolutionErd.Layout
             return true;
         }
 
+        /// <summary>Length of the part two axis-parallel segments share.</summary>
+        static double Shared(Segment s, Segment t)
+        {
+            bool Horizontal(Segment x) => Math.Abs(x.A.Y - x.B.Y) < Eps;
+            bool Vertical(Segment x) => Math.Abs(x.A.X - x.B.X) < Eps;
+            if (Horizontal(s) && Horizontal(t) && Math.Abs(s.A.Y - t.A.Y) < Eps)
+            {
+                return Math.Max(0, Math.Min(Math.Max(s.A.X, s.B.X), Math.Max(t.A.X, t.B.X)) - Math.Max(Math.Min(s.A.X, s.B.X), Math.Min(t.A.X, t.B.X)));
+            }
+
+            if (Vertical(s) && Vertical(t) && Math.Abs(s.A.X - t.A.X) < Eps)
+            {
+                return Math.Max(0, Math.Min(Math.Max(s.A.Y, s.B.Y), Math.Max(t.A.Y, t.B.Y)) - Math.Max(Math.Min(s.A.Y, s.B.Y), Math.Min(t.A.Y, t.B.Y)));
+            }
+
+            return 0;
+        }
+
         static double Orient(Pt a, Pt b, Pt c) => (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X);
+
+        /// <summary>True when the segment passes through the inside of the box (touching its edge doesn't count).</summary>
+        internal static bool SegmentHitsBox(Pt a, Pt b, BoxLayout box) => HitsBox(new Segment { A = a, B = b }, box);
 
         static bool HitsBox(Segment s, BoxLayout box)
         {
@@ -113,7 +141,23 @@ namespace SolutionErd.Layout
             var maxX = Math.Max(s.A.X, s.B.X);
             var minY = Math.Min(s.A.Y, s.B.Y);
             var maxY = Math.Max(s.A.Y, s.B.Y);
-            return maxX > left && minX < right && maxY > top && minY < bottom;
+            if (!(maxX > left && minX < right && maxY > top && minY < bottom)) return false;
+            if (minX == maxX || minY == maxY) return true;
+
+            // A diagonal segment: clip it to the box (Liang-Barsky) and see if anything is left.
+            double t0 = 0, t1 = 1;
+            var dx = s.B.X - s.A.X;
+            var dy = s.B.Y - s.A.Y;
+            bool Clip(double p, double q)
+            {
+                if (Math.Abs(p) < 1e-9) return q > 0;
+                var r = q / p;
+                if (p < 0) t0 = Math.Max(t0, r);
+                else t1 = Math.Min(t1, r);
+                return t0 < t1;
+            }
+
+            return Clip(-dx, s.A.X - left) && Clip(dx, right - s.A.X) && Clip(-dy, s.A.Y - top) && Clip(dy, bottom - s.A.Y);
         }
     }
 }

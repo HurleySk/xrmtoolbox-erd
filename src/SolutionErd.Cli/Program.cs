@@ -31,6 +31,7 @@ namespace SolutionErd.Cli
       --no-outside                  hide lookups to tables outside the solution
       --external                    show out-of-solution children
       --incoming                    on split pages, also draw lookups from other pages
+      --overview layered|routed|straight   overview page layout (experiment 005)
       --scale <f>                   PNG scale (default 1)
       --no-png                      skip PNGs
       --name <name>                 output file name (default: snapshot file name)";
@@ -85,6 +86,11 @@ namespace SolutionErd.Cli
                     case "--no-outside": options.ShowOutsideTables = false; break;
                     case "--external": options.ShowExternalChildren = true; break;
                     case "--incoming": options.ShowIncomingFromOtherPages = true; break;
+                    case "--overview":
+                        var style = Next();
+                        options.OverviewStyle = style == "layered" ? OverviewStyle.Layered
+                            : style == "routed" ? OverviewStyle.SpreadRouted : OverviewStyle.SpreadStraight;
+                        break;
                     case "--scale": scale = float.Parse(Next(), CultureInfo.InvariantCulture); break;
                     case "--no-png": png = false; break;
                     case "--name": name = Next(); break;
@@ -108,7 +114,7 @@ namespace SolutionErd.Cli
             }
 
             Console.WriteLine($"TOTAL: pages {scores.Count}, edges {scores.Sum(s => s.Edges)}, crossings {scores.Sum(s => s.Crossings)}, " +
-                              $"bends {scores.Sum(s => s.Bends)}, box hits {scores.Sum(s => s.BoxHits)}, score {scores.Sum(s => s.Score):0.0}");
+                              $"bends {scores.Sum(s => s.Bends)}, box hits {scores.Sum(s => s.BoxHits)}, overlap {scores.Sum(s => s.Overlap):0}, score {scores.Sum(s => s.Score):0.0}");
             return 0;
         }
 

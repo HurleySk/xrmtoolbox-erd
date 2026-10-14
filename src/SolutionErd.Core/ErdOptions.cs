@@ -16,6 +16,19 @@ namespace SolutionErd
         Stubs,
     }
 
+    /// <summary>How the overview page places its subject areas and draws the lines between them.</summary>
+    public enum OverviewStyle
+    {
+        /// <summary>Same layered layout and right-angle lines as the detail pages.</summary>
+        Layered,
+
+        /// <summary>Areas spread out in two dimensions, right-angle lines leaving from any side.</summary>
+        SpreadRouted,
+
+        /// <summary>Areas spread out in two dimensions, straight lines between them.</summary>
+        SpreadStraight,
+    }
+
     public sealed class ErdOptions
     {
         public ColumnMode Columns { get; set; } = ColumnMode.KeysAndLookups;
@@ -45,6 +58,7 @@ namespace SolutionErd
         /// <summary>On split pages, also draw lookups from tables on other pages into this page's tables.</summary>
         public bool ShowIncomingFromOtherPages { get; set; }
         public LayoutDirection Direction { get; set; } = LayoutDirection.LeftToRight;
+        public OverviewStyle OverviewStyle { get; set; } = OverviewStyle.SpreadStraight;
 
         public ErdOptions Clone() => (ErdOptions)MemberwiseClone();
     }

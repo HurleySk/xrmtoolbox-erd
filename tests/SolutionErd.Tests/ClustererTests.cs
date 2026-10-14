@@ -88,6 +88,18 @@ namespace SolutionErd.Tests
         }
 
         [Fact]
+        public void OverviewDrawsOneLinePerPairOfAreas()
+        {
+            var (_, pages) = Paginate("project-delivery");
+
+            var pairs = pages[0].Edges.Select(e => string.CompareOrdinal(e.ChildTable, e.ParentTable) < 0
+                ? e.ChildTable + "|" + e.ParentTable
+                : e.ParentTable + "|" + e.ChildTable).ToList();
+            Assert.NotEmpty(pairs);
+            Assert.Equal(pairs.Count, pairs.Distinct().Count());
+        }
+
+        [Fact]
         public void PaginationIsDeterministic()
         {
             var a = Paginate("project-delivery").pages.Select(p => p.Name + ":" + string.Join(",", p.Tables.Select(t => t.Table.Name)));

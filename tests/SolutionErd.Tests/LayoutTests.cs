@@ -22,6 +22,14 @@ namespace SolutionErd.Tests
             }
         }
 
+        [Fact]
+        public void OverviewLinesNeverShareARun()
+        {
+            var overview = Build("project-delivery").Pages.Single(p => p.IsOverview);
+
+            Assert.Equal(0, LayoutMetrics.Measure(overview).Overlap);
+        }
+
         [Theory]
         [InlineData("assets")]
         [InlineData("project-delivery")]
@@ -83,9 +91,11 @@ namespace SolutionErd.Tests
         }
 
         [Fact]
-        public void EdgesAreOrthogonal()
+        public void DetailPageEdgesAreOrthogonal()
         {
-            foreach (var page in Build("project-delivery").Pages)
+            var pages = Build("project-delivery").Pages;
+            Assert.All(pages.Single(p => p.IsOverview).Edges, e => Assert.True(e.Straight, e.Id));
+            foreach (var page in pages.Where(p => !p.IsOverview))
             {
                 foreach (var edge in page.Edges)
                 {

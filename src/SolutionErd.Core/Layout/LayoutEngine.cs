@@ -6,6 +6,7 @@ using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Layout.Layered;
+using Microsoft.Msagl.Layout.MDS;
 using Microsoft.Msagl.Miscellaneous;
 using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.Routing.Rectilinear;
@@ -31,8 +32,19 @@ namespace SolutionErd.Layout
             var byName = boxes.ToDictionary(b => b.Name);
             var edges = page.Edges.Where(e => byName.ContainsKey(e.ParentTable) && byName.ContainsKey(e.ChildTable)).ToList();
 
-            Place(boxes, edges, byName);
-            var routed = Route(edges, byName, page.IsOverview);
+            List<EdgeLayout> routed;
+            if (page.IsOverview && options.OverviewStyle != OverviewStyle.Layered)
+            {
+                PlaceSpread(boxes, edges);
+                routed = options.OverviewStyle == OverviewStyle.SpreadStraight
+                    ? RouteStraight(edges, byName)
+                    : RouteFromCentres(edges, byName);
+            }
+            else
+            {
+                Place(boxes, edges, byName);
+                routed = Route(edges, byName, page.IsOverview);
+            }
 
             var layout = new PageLayout { Name = page.Name, IsOverview = page.IsOverview, Boxes = boxes, Edges = routed };
             Normalize(layout);
@@ -87,6 +99,188 @@ namespace SolutionErd.Layout
                 box.X = Math.Round(x - box.Width / 2);
                 box.Y = Math.Round(y - box.Height / 2);
             }
+        }
+
+        /// <summary>Places boxes in two dimensions by graph distance (MDS), then pushes overlapping boxes apart.</summary>
+        static void PlaceSpread(List<BoxLayout> boxes, List<DiagramEdge> edges)
+        {
+            var graph = new GeometryGraph();
+            var nodes = new Dictionary<string, Node>();
+            foreach (var box in boxes)
+            {
+                var node = new Node(CurveFactory.CreateRectangle(box.Width, box.Height, new Point(0, 0)), box);
+                graph.Nodes.Add(node);
+                nodes[box.Name] = node;
+            }
+
+            var pairs = new HashSet<(string, string)>();
+            foreach (var e in edges.Where(e => !e.IsSelf))
+            {
+                if (pairs.Contains((e.ChildTable, e.ParentTable)) || !pairs.Add((e.ParentTable, e.ChildTable))) continue;
+                graph.Edges.Add(new Edge(nodes[e.ParentTable], nodes[e.ChildTable]));
+            }
+
+            var settings = new MdsLayoutSettings
+            {
+                RemoveOverlaps = true,
+                NodeSeparation = ErdStyle.NodeSeparation * 3,
+            };
+            settings.EdgeRoutingSettings.EdgeRoutingMode = EdgeRoutingMode.StraightLine;
+            LayoutHelpers.CalculateLayout(graph, settings, null, null);
+
+            foreach (var box in boxes)
+            {
+                var c = nodes[box.Name].Center;
+                box.X = Math.Round(c.X - box.Width / 2);
+                box.Y = Math.Round(-c.Y - box.Height / 2);
+            }
+        }
+
+        /// <summary>
+        /// Straight lines between box centres, cut off at the box edges. A line that would cross another box
+        /// curves around it instead.
+        /// </summary>
+        static List<EdgeLayout> RouteStraight(List<DiagramEdge> edges, Dictionary<string, BoxLayout> byName)
+        {
+            var result = new List<EdgeLayout>();
+            var blocked = new List<(EdgeLayout layout, BoxLayout child, BoxLayout parent)>();
+            foreach (var e in edges.Where(e => !e.IsSelf))
+            {
+                var child = byName[e.ChildTable];
+                var parent = byName[e.ParentTable];
+                var a = new Pt(child.CenterX, child.CenterY);
+                var b = new Pt(parent.CenterX, parent.CenterY);
+                var layout = new EdgeLayout
+                {
+                    Id = e.Id,
+                    FromBox = child.Id,
+                    ToBox = parent.Id,
+                    Label = e.Label,
+                    Straight = true,
+                    FromRight = b.X >= a.X,
+                    ToRight = a.X > b.X,
+                    Points = new List<Pt> { Exit(a, b, child), Exit(b, a, parent) },
+                };
+                result.Add(layout);
+                if (byName.Values.Any(box => box != child && box != parent && LayoutMetrics.SegmentHitsBox(layout.Points[0], layout.Points[1], box)))
+                {
+                    blocked.Add((layout, child, parent));
+                }
+            }
+
+            if (blocked.Count > 0) CurveAround(blocked, byName);
+            return result;
+        }
+
+        /// <summary>Routes the given lines as smooth curves that keep clear of every box, sampled into short segments.</summary>
+        static void CurveAround(List<(EdgeLayout layout, BoxLayout child, BoxLayout parent)> blocked, Dictionary<string, BoxLayout> byName)
+        {
+            var graph = new GeometryGraph();
+            var nodes = new Dictionary<BoxLayout, Node>();
+            foreach (var box in byName.Values)
+            {
+                var node = new Node(CurveFactory.CreateRectangle(box.Width, box.Height, new Point(box.CenterX, box.CenterY)), box);
+                graph.Nodes.Add(node);
+                nodes[box] = node;
+            }
+
+            var routed = new List<(EdgeLayout layout, Edge edge, BoxLayout child, BoxLayout parent)>();
+            foreach (var (layout, child, parent) in blocked)
+            {
+                var edge = new Edge(nodes[child], nodes[parent]);
+                graph.Edges.Add(edge);
+                routed.Add((layout, edge, child, parent));
+            }
+
+            try
+            {
+                new SplineRouter(graph, ErdStyle.RoutingPadding, ErdStyle.RoutingPadding * 2, Math.PI / 6, null).Run();
+            }
+            catch (Exception)
+            {
+                return; // keep the straight lines
+            }
+
+            foreach (var (layout, edge, child, parent) in routed)
+            {
+                var curve = edge.Curve;
+                if (curve == null) continue;
+                const int samples = 24;
+                var points = Enumerable.Range(0, samples + 1)
+                    .Select(i => curve[curve.ParStart + (curve.ParEnd - curve.ParStart) * i / samples])
+                    .Select(p => new Pt(p.X, p.Y))
+                    .ToList();
+                points = TrimInside(points, child, fromStart: true);
+                points = TrimInside(points, parent, fromStart: false);
+                if (points.Count >= 2) layout.Points = points;
+            }
+        }
+
+        /// <summary>Right-angle lines that may leave a box from any side: routed from the centres, cut at the edges.</summary>
+        static List<EdgeLayout> RouteFromCentres(List<DiagramEdge> edges, Dictionary<string, BoxLayout> byName)
+        {
+            var shapes = byName.Values.ToDictionary(
+                b => b.Name,
+                b => new Shape(CurveFactory.CreateRectangle(b.Width, b.Height, new Point(b.CenterX, b.CenterY))) { UserData = b });
+            var router = new RectilinearEdgeRouter(shapes.Values, ErdStyle.RoutingPadding, 0, false);
+            var pending = new List<(EdgeLayout layout, EdgeGeometry geometry, BoxLayout child, BoxLayout parent)>();
+            foreach (var e in edges.Where(e => !e.IsSelf))
+            {
+                var child = byName[e.ChildTable];
+                var parent = byName[e.ParentTable];
+                var layout = new EdgeLayout { Id = e.Id, FromBox = child.Id, ToBox = parent.Id, Label = e.Label };
+                var sourcePort = new FloatingPort(shapes[child.Name].BoundaryCurve, new Point(child.CenterX, child.CenterY));
+                var targetPort = new FloatingPort(shapes[parent.Name].BoundaryCurve, new Point(parent.CenterX, parent.CenterY));
+                shapes[child.Name].Ports.Insert(sourcePort);
+                shapes[parent.Name].Ports.Insert(targetPort);
+                var geometry = new EdgeGeometry { SourcePort = sourcePort, TargetPort = targetPort };
+                router.AddEdgeGeometryToRoute(geometry);
+                pending.Add((layout, geometry, child, parent));
+            }
+
+            router.Run();
+            foreach (var (layout, geometry, child, parent) in pending)
+            {
+                var points = Points(geometry.Curve);
+                if (points.Count < 2)
+                {
+                    points = new List<Pt> { new Pt(child.CenterX, child.CenterY), new Pt(parent.CenterX, parent.CenterY) };
+                    layout.Straight = true;
+                }
+
+                points = TrimInside(points, child, fromStart: true);
+                points = TrimInside(points, parent, fromStart: false);
+                layout.Points = Simplify(points);
+                layout.FromRight = layout.Points[0].X >= child.Right - 0.5;
+                layout.ToRight = layout.Points[layout.Points.Count - 1].X >= parent.Right - 0.5;
+            }
+
+            return pending.Select(p => p.layout).ToList();
+        }
+
+        /// <summary>Drops the part of a route that runs inside its end box, so it starts or ends on the box edge.</summary>
+        static List<Pt> TrimInside(List<Pt> points, BoxLayout box, bool fromStart)
+        {
+            var list = fromStart ? points.ToList() : Enumerable.Reverse(points).ToList();
+            bool Inside(Pt p) => p.X > box.X + 0.5 && p.X < box.Right - 0.5 && p.Y > box.Y + 0.5 && p.Y < box.Bottom - 0.5;
+            while (list.Count > 2 && Inside(list[1])) list.RemoveAt(0);
+            if (Inside(list[0])) list[0] = Exit(list[0], list[1], box);
+            if (!fromStart) list.Reverse();
+            return list;
+        }
+
+        /// <summary>Where the segment from <paramref name="inside"/> towards <paramref name="toward"/> leaves the box.</summary>
+        internal static Pt Exit(Pt inside, Pt toward, BoxLayout box)
+        {
+            var dx = toward.X - inside.X;
+            var dy = toward.Y - inside.Y;
+            var t = 1.0;
+            if (dx > 0) t = Math.Min(t, (box.Right - inside.X) / dx);
+            else if (dx < 0) t = Math.Min(t, (box.X - inside.X) / dx);
+            if (dy > 0) t = Math.Min(t, (box.Bottom - inside.Y) / dy);
+            else if (dy < 0) t = Math.Min(t, (box.Y - inside.Y) / dy);
+            t = Math.Max(0, t);
+            return new Pt(inside.X + dx * t, inside.Y + dy * t);
         }
 
         List<EdgeLayout> Route(List<DiagramEdge> edges, Dictionary<string, BoxLayout> byName, bool overview)

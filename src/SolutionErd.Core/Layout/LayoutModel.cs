@@ -75,6 +75,9 @@ namespace SolutionErd.Layout
         public EndMark StartMark { get; set; }
         public EndMark EndMark { get; set; }
         public string Label { get; set; }
+
+        /// <summary>A straight line at any angle, not a right-angle route.</summary>
+        public bool Straight { get; set; }
     }
 
     public sealed class PageLayout

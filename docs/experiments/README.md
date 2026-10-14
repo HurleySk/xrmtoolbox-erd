@@ -15,6 +15,7 @@ Metrics come from `solution-erd render`. Crossings and box hits matter most. The
 | [002](002-own-lookups-only.md) | A page draws only its own tables' lookups | kept |
 | [003](003-off-page-labels.md) | Off-page lookups as "→ Target" row text instead of stub boxes | kept |
 | [004](004-shortcut-lookups.md) | Denormalised lookups as "→ Target (via X)" row text (004a bug, 004b fix) | 004b kept |
+| [005](005-overview.md) | Overview: one line per pair of areas, spread placement, straight lines; new overlap metric | kept (straight) |
 
 ## What 002-004 changed, and what they didn't
 

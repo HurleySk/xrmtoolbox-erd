@@ -16,7 +16,7 @@ A lookup whose target is not drawn in full on the page (outside the solution, or
 
 ## Notes
 - real-b's biggest page lost all 49 stubs.
-- What's left on real-a is denormalisation: ten component tables each look up their structure table and four of its ancestors, about 50 lines into 5 tables. The structure table already has those same lookups.
+- What's left on real-a is denormalisation: ten child tables each look up their parent and four of the parent's ancestors, about 50 lines into 5 tables. The parent already has those same lookups.
 
 ## Verdict
 Kept, default on. The row text keeps the information, and pages are much smaller.

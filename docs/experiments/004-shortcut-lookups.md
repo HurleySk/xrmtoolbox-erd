@@ -31,7 +31,7 @@ The numbers looked great and were wrong. Each lookup was checked on its own, so 
 | real-b | 101 | 82 | 250 | 767.9 | crossings -47% |
 
 ## Notes
-- real-a's densest page now reads as a hierarchy five levels deep down to ten component tables, each component row saying "→ Project (via Structure)" or similar. The lines left between components are real component-to-component lookups.
+- real-a's densest page now reads as a hierarchy five levels deep down to ten child tables, whose ancestor lookups now read "→ Ancestor (via Parent)". The lines left between the child tables are real lookups between them.
 - Since 001, crossings are down 88% on real-a and 92% on real-b, but lines drawn are down 62% and 70%, and the layout code hasn't changed. Most of the drop is fewer lines, not better routing. See the [README](README.md#what-002-004-changed-and-what-they-didnt).
 - real-b's worst page now has 8 tables and 36 lines. A core table there has six self-lookups, and other tables have several lookups to the same parent.
 
