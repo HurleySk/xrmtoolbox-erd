@@ -14,11 +14,11 @@
     <RootNamespace>SolutionErdXrmToolBoxPlugin</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Title>Solution ERD Builder</Title>
-    <Version>1.0.0.0</Version>
+    <Version>0.1.0.1</Version>
     <Authors>Samuel Hurley</Authors>
     <Company>Procentrix</Company>
     <Copyright>Copyright (c) Samuel Hurley 2026</Copyright>
-    <Description>Draws readable ERDs of the tables in a Dataverse solution and exports them to draw.io and Visio.</Description>
+    <Description>Draws readable ERDs of the tables in a Dataverse solution, split into subject-area pages, and exports them to draw.io. Alpha.</Description>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
     <!-- Suppress framework folder in package -->
@@ -29,9 +29,11 @@
     <!-- NuGet Package Metadata -->
     <PackageProjectUrl>https://github.com/HurleySk/xrmtoolbox-erd</PackageProjectUrl>
     <PackageIcon>icon-128.png</PackageIcon>
+    <!-- The XrmToolBox Tool Library shows the icon from this URL, not the embedded one -->
+    <PackageIconUrl>https://raw.githubusercontent.com/HurleySk/xrmtoolbox-erd/main/src/SolutionErdXrmToolBoxPlugin/Resources/icon-128.png</PackageIconUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>XrmToolBox;Dynamics365;Dataverse;PowerPlatform</PackageTags>
-    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    <PackageTags>XrmToolBox;Dynamics365;Dataverse;PowerPlatform;ERD;Diagram;drawio</PackageTags>
+    <PackageReleaseNotes>First alpha. Pick a solution, preview its ERD page by page (an overview of subject areas, then one page per area) and export to draw.io. System relationships are hidden, and lookups to tables on other pages or outside the solution are shown as row text instead of lines. Metadata can be saved to a file and opened later without a connection. Visio export is not in this version.</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/HurleySk/xrmtoolbox-erd</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -68,7 +70,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SolutionErd.Core\SolutionErd.Core.csproj" />
+    <!-- Shipped inside the package (Plugins\Dependencies), so not a NuGet dependency -->
+    <ProjectReference Include="..\SolutionErd.Core\SolutionErd.Core.csproj" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>

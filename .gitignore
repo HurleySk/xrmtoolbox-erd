@@ -145,3 +145,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Metadata snapshots of real solutions never go in the repo
+fixtures/private/
+*-metadata.json

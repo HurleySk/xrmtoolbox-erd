@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Solution ERD Builder")]
-[assembly: AssemblyDescription("Draws readable ERDs of the tables in a Dataverse solution and exports them to draw.io and Visio.")]
+[assembly: AssemblyDescription("Draws readable ERDs of the tables in a Dataverse solution, split into subject-area pages, and exports them to draw.io. Alpha.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Procentrix")]
 [assembly: AssemblyProduct("SolutionErdXrmToolBoxPlugin")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("0.1.0.1")]
+[assembly: AssemblyFileVersion("0.1.0.1")]

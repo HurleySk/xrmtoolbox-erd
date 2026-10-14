@@ -14,19 +14,19 @@ namespace SolutionErdXrmToolBoxPlugin
 {
     [Export(typeof(IXrmToolBoxPlugin))]
     [ExportMetadata("Name", "Solution ERD Builder")]
-    [ExportMetadata("Description", "Draws readable ERDs of the tables in a Dataverse solution and exports them to draw.io and Visio.")]
-    [ExportMetadata("SmallImageBase64", "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD7SURBVFhHxZM9DoJAEEY5Hgey4BzUnsBLyCGIlQWxhMqOboz757oPVDT5nOQVvM0y3w5LVTW9/RUINRBqINRAqIFQA6EGQg2EGgg1EGogAruT+TpdgrvY0YnZhimsFXXsRhtKmfavAJE42941utqu6a3uZt/kUIb06861PsDQnd2z3zPbvi3f/VGA3qrD1TUdutGfvjjNuwBYXwLiiTiFe/EkaBAC5JVPbBGIJ74LECcQJ/gyBEROfEG8XBs/AZ6XgEiEWz+NVmd/xZZL+MMEHqNPm9P3fTRcC5DXy9OvBxACoQZCDYQaCDUQaiDUQKiBUAOhBkINhBoIMTdgXbYr3PWyNwAAAABJRU5ErkJggg==")]
-    [ExportMetadata("BigImageBase64", "iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJTSURBVHhe7dYxTsMwGIbhHo8DMXAO5p6AS8AhEFOHqiOd2NiMWlo19fsn9mc7iOGL9Cxv0uA4Nu1m8/SerAOCaRBMg2AaBNMgmAbBNAimQTANgmkQTINgGgTTIJgGwTQIpkEwDYJpEEyDYBoE0yCYBsE0CKZBMA2CaRBMg2AaBNMgmAbBNAimQVC8fCUeX+kxv+7i4e07vzi9vrynx4+81h+nz//ef5e2x/xsfOzfdhhbMwRRNCnhAJ8/0z6/8ONwPvfXE3g9bp/tgCA7pNd8ZMEq5CTdruG5+qNnAlP6Ttvn/HlECC2CrXy3CoPVV3z7uCdfyj1O4P1O4Hle0wChSTC442d6uJzHCpucmzV8Ak+C3XL5N9IModXcKkOv3DarTGDNNSKEDtFK22atesBrTGDry1yC0CXYIndHaRImhk9g6XwjhE7Rz5rrUfzimBowgfPHgJV3hdBt5kFqvjimVp3AAV8eVwidllagtGXWnsDzMWAlIvTAP+n8KE3CxIAJxAuLxqfujBxCs+gBDmjVW2eNCQzvK/5vziE04ta9bI/WAeNzgyYwWIVV45mD0IQ/X26D54NVbZu1JhD3/QcTiB/Q+cMGgw4fbvEzAyYwWH3l+xYgqPCgwcCDhyt+A+K+pQeN/kb54FhFCBJu3dkHjd7+0hfKH0xg9+SdIFSLB7w0KG71hevXnMClF6dCMA2CaRBMg2AaBNMgmAbBNAimQTANgmkQTINgGgTTIJgGwTQIpkEwDYJpEEyDYBoE0yCYBsE0CKZBMA2CaRBMg2AaBJP8AEUbkSEqIWYjAAAAAElFTkSuQmCC")]
+    [ExportMetadata("Description", "Draws readable ERDs of the tables in a Dataverse solution, split into subject-area pages, and exports them to draw.io. Alpha.")]
+    [ExportMetadata("SmallImageBase64", "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEtSURBVFhH7Va7DcIwFKSkZAFDA9SMwgBIfIUo6UhHOiSSigUogAHokWAGFqAjbBF0kR2Fx8fPOAiQfNIpUfLufEls5xUK/4JKe1mq9Tc+h6ilemtI85hJn+qt4QL8RIDWfBcvtseXRM3HAmAAHVCTa4AoFJ0oEP5wPDlwA6AWGmhP00qRerJxDsToEpZjcOb1EnMdUINapYtC4VFfNvAU0mhv+gagSQIE4v3PoQLgaDoHslrqy4YLkDWpdlfjBxvOQ6I29wD0ng422hQ2JjbaFDYmRtp6b9OUP5sbYj1jU8GR3gPReDxrVHRajJkGoJPIgMqQXmfRBfitAKqh4FI1HiCnUaG8C2AKaZIEwLkpXAAX4C4AnaU65roK5L9erWk+B+tGQnqdQYyZBvgmrgSZkKo2rrZwAAAAAElFTkSuQmCC")]
+    [ExportMetadata("BigImageBase64", "iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALcSURBVHhe7ZxPaNNgGId79OhxB9cIY+jdmxfrxXkQ0asolfbkhiIy7MQJxYvSFhTxbIdueJhTh6IexCIIE0EKgvgP8TB0HcyDispEiLzVSPoltEl/yZc0+T3wHEbL8vZZ6deQfMtkCCGEhM5I8eru0cJcQ4+zh9XjDzzyokaLc6Ymy+rxBx4GBGFAEAYEYUAQBgRhQBAGBLEC7iwtmgcrD0Nx7PSd5Ae8tPjCDIuFJ+8ZEIEBQVIX8POX7+bK2te+/fZjPd0BHyy9NWfuPu/b5ptP6Q747OVyO2K/vlteS3fAoGFAkEQEXKkaudVq9larlm3YvTh14JWugKcmJz6ox/8706Z96ryxYrViDLVqwz9btaypWp/e335x9oDyGSYLQb/KSuwW8NxUwXF8y481Y6s6d2yQd586cLeAYa3C3QLKjOrcsaEz4HBTfrY8dOzMeTVgWO/APeOVGfuxZZYBDJht2B+LchH59znIgL1gQJDUBQxrEWFAj6Y+YNAwIAgDgjAgSCoCytUziRiGRy4/Tn5ATSYvoJGvD40Ur+V0uCV/fbP92IkIGCUMCMKAIAwIwoAgDAjCgCAMCKIloJGvb1C/kPr15OTE8ftnd5jifHlXU33cj/Yvw+iXcJnFmktmVB/3q5Gvb+ysl8lkZGCXU6Io/X86pvk0sKcSsbMeA/qSAUEZEJQBQRkQlAFBGRCUAUG7Btxbvmc+fd2KzOqNpjWoI2DpypLj+TotXHjUO6BcNYsSt0uTOi6JekH+gAwIwIAgvgPKLbjq5pag9bJZxi0guknHi7IVzY7vgHL7mHpLWdB6uUXNLaC8QPV3Ba16D7bvgLKZT93gF7ReNgy6BUQ3Knpx/dfvjtl8B4wCrwGjgAFBGBDEd0AuIuAiwoBgwCjwGjAKGBCEAUEYEIQBQRgQxFPAbUfn2xGjcmza+Q/ErIC50m3H83W6/cTN3gFjpCNgXHQNSAghKeQP4rPLVeufWYsAAAAASUVORK5CYII=")]
     [ExportMetadata("BackgroundColor", "White")]
     [ExportMetadata("PrimaryFontColor", "Black")]
     [ExportMetadata("SecondaryFontColor", "Gray")]
     [ExportMetadata("IsOpenSource", true)]
-    public class SolutionErdPlugin : PluginBase, IGitHubPlugin
+    public class SolutionErdPlugin : PluginBase, IGitHubPlugin, IHelpPlugin
     {
-        // IGitHubPlugin: links your plugin to its GitHub repository.
-        // Remove IGitHubPlugin (and these properties) if not hosting on GitHub.
         public string RepositoryName => "xrmtoolbox-erd";
         public string UserName => "HurleySk";
+
+        public string HelpUrl => "https://github.com/HurleySk/xrmtoolbox-erd#readme";
 
         public override IXrmToolBoxPluginControl GetControl()
         {

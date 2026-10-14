@@ -1,0 +1,125 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Build and pack without pushing to NuGet'
+        type: boolean
+        default: true
+
+env:
+  PROJECT: src/SolutionErdXrmToolBoxPlugin/SolutionErdXrmToolBoxPlugin.csproj
+  ASSEMBLY_INFO: src/SolutionErdXrmToolBoxPlugin/Properties/AssemblyInfo.cs
+  OUTPUT: src/SolutionErdXrmToolBoxPlugin/bin/Release
+
+jobs:
+  release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Read project version
+        id: version
+        shell: pwsh
+        run: |
+          [xml]$proj = Get-Content $env:PROJECT
+          $version = $proj.Project.PropertyGroup.Version | Where-Object { $_ }
+          if (-not $version) { throw 'No <Version> found in the csproj.' }
+          if ($version.Split('.').Count -ne 4 -or $version.EndsWith('.0')) {
+            throw "Version $version must have four parts and a non-zero last part, or nuget.org shortens it and it no longer matches the assembly version."
+          }
+          "version=$version" >> $env:GITHUB_OUTPUT
+          Write-Host "Project version: $version"
+
+      - name: Verify tag matches project version
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        run: |
+          $tag = '${{ github.ref_name }}'.TrimStart('v')
+          $version = '${{ steps.version.outputs.version }}'
+          if ($tag -ne $version) {
+            throw "Tag $tag does not match csproj version $version. The XrmToolBox Tool Store requires the package and assembly versions to match."
+          }
+
+      - name: Build
+        run: dotnet build SolutionErd.sln --configuration Release
+
+      - name: Test
+        run: dotnet test SolutionErd.sln --configuration Release --no-build
+
+      - name: Verify assembly version matches package version
+        shell: pwsh
+        run: |
+          $dll = "$env:OUTPUT\net48\SolutionErdXrmToolBoxPlugin.dll"
+          $name = [System.Reflection.AssemblyName]::GetAssemblyName((Resolve-Path $dll))
+          $asm = $name.Version.ToString()
+          $file = (Get-Item $dll).VersionInfo.FileVersion
+          $version = '${{ steps.version.outputs.version }}'
+          if ($asm -ne $version -or $file -ne $version) {
+            throw "Assembly version $asm / file version $file do not match package version $version. The Tool Store would report a permanent update-available state."
+          }
+
+      - name: Pack
+        run: dotnet pack ${{ env.PROJECT }} --configuration Release --no-build
+
+      - name: Verify package layout
+        shell: pwsh
+        run: |
+          $pkg = Get-ChildItem "$env:OUTPUT\*.nupkg" | Select-Object -First 1
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $zip = [System.IO.Compression.ZipFile]::OpenRead($pkg.FullName)
+          try {
+            $names = $zip.Entries.FullName
+            $rootDlls = $names | Where-Object { $_ -match '^Plugins/[^/]+\.dll$' }
+            if ($rootDlls.Count -ne 1) {
+              throw "Expected exactly one DLL at the root of Plugins/, found: $($rootDlls -join ', '). XrmToolBox treats every root DLL as a candidate tool."
+            }
+            foreach ($required in 'Plugins/SolutionErdXrmToolBoxPlugin.dll', 'Plugins/Dependencies/SolutionErd.Core.dll', 'Plugins/Dependencies/AutomaticGraphLayout.dll') {
+              if ($names -notcontains $required) { throw "$required missing from the package." }
+            }
+            if ($names | Where-Object { $_ -match '^lib/' }) { throw 'Package has a lib/ folder; XrmToolBox plugins go in Plugins/.' }
+            Write-Host "Package layout OK: $($names -join ', ')"
+          } finally { $zip.Dispose() }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nupkg
+          path: ${{ env.OUTPUT }}/*.nupkg
+
+      - name: NuGet login
+        id: login
+        if: startsWith(github.ref, 'refs/tags/v') && inputs.dry_run != true
+        uses: NuGet/login@v1
+        with:
+          user: HurleySk
+
+      - name: Push to NuGet
+        if: startsWith(github.ref, 'refs/tags/v') && inputs.dry_run != true
+        shell: pwsh
+        run: dotnet nuget push "$env:OUTPUT\*.nupkg" --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: Create GitHub release
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          pkg=$(ls $OUTPUT/*.nupkg | head -1)
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            gh release upload "$TAG" "$pkg" --clobber
+          else
+            gh release create "$TAG" "$pkg" --title "$TAG" --generate-notes --prerelease
+          fi
