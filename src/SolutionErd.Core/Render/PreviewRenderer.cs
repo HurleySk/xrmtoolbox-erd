@@ -20,6 +20,7 @@ namespace SolutionErd.Render
         static readonly Color TitleText = ColorTranslator.FromHtml("#1F2D3D");
         static readonly Color MutedText = ColorTranslator.FromHtml("#6B7785");
         static readonly Color LineColor = ColorTranslator.FromHtml("#4D4D4D");
+        static readonly Color RefText = ColorTranslator.FromHtml("#3D6DB5");
 
         public static Bitmap Render(PageLayout page, float scale = 1f)
         {
@@ -69,6 +70,7 @@ namespace SolutionErd.Render
             using (var keyFont = new Font(ErdStyle.FontFamily, 9f, FontStyle.Bold, GraphicsUnit.Pixel))
             using (var titleBrush = new SolidBrush(TitleText))
             using (var mutedBrush = new SolidBrush(MutedText))
+            using (var refBrush = new SolidBrush(RefText))
             using (var keyBrush = new SolidBrush(stroke))
             using (var format = new StringFormat(StringFormat.GenericTypographic) { Trimming = StringTrimming.EllipsisCharacter, FormatFlags = StringFormatFlags.NoWrap, LineAlignment = StringAlignment.Center })
             {
@@ -108,7 +110,15 @@ namespace SolutionErd.Render
                     }
 
                     var font = row.Bold ? rowBold : rowFont;
-                    var available = rect.Right - pad - x;
+                    var right = rect.Right - pad;
+                    if (row.Ref != null)
+                    {
+                        var refWidth = Math.Min(right - x, (float)ErdStyle.MeasureText(row.Ref, ErdStyle.RowSubSize));
+                        g.DrawString(row.Ref, rowSub, refBrush, new RectangleF(right - refWidth, top, refWidth + 2, h), format);
+                        right -= refWidth + 10;
+                    }
+
+                    var available = right - x;
                     var textWidth = Math.Min(available, (float)ErdStyle.MeasureText(row.Text, ErdStyle.RowSize, row.Bold));
                     g.DrawString(row.Text, font, titleBrush, new RectangleF(x, top, textWidth + 2, h), format);
                     if (row.SubText != null && available - textWidth > 20)

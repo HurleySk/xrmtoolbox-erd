@@ -63,9 +63,15 @@ namespace SolutionErd.Layout
                             break;
                     }
 
+                    if (pageTable.RowRefs.TryGetValue(row.Name, out var targets) && targets.Count > 0)
+                    {
+                        layout.Ref = "→ " + string.Join(", ", targets);
+                    }
+
                     var rowWidth = (isArea ? 0 : ErdStyle.KeyColumnWidth)
                         + ErdStyle.MeasureText(layout.Text, ErdStyle.RowSize, layout.Bold)
                         + (layout.SubText == null ? 0 : 6 + ErdStyle.MeasureText(layout.SubText, ErdStyle.RowSubSize))
+                        + (layout.Ref == null ? 0 : 10 + ErdStyle.MeasureText(layout.Ref, ErdStyle.RowSubSize))
                         + 2 * ErdStyle.TextPadding;
                     width = Math.Max(width, rowWidth);
                     box.Rows.Add(layout);

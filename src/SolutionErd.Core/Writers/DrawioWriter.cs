@@ -106,6 +106,7 @@ namespace SolutionErd.Writers
 
                     var text = row.Bold ? "<b>" + Html(row.Text) + "</b>" : Html(row.Text);
                     if (row.SubText != null) text += "&nbsp;&nbsp;<span style=\"font-size:10px;color:#6B7785\">" + Html(row.SubText) + "</span>";
+                    if (row.Ref != null) text += "&nbsp;&nbsp;&nbsp;<span style=\"font-size:10px;color:#3D6DB5\">" + Html(row.Ref) + "</span>";
                     Vertex(w, rowId + "-n", rowId, text,
                         "shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=" +
                         (box.IsArea ? "8" : "0") + ";overflow=hidden;whiteSpace=wrap;html=1;fontSize=11;fontColor=#1F2D3D;" + Font,

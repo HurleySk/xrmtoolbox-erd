@@ -55,13 +55,36 @@ namespace SolutionErd.Tests
         }
 
         [Fact]
-        public void HubsBecomeStubsOnOtherPages()
+        public void HubsAreRowLabelsOnOtherPages()
         {
             var (_, pages) = Paginate("project-delivery");
 
             var detail = pages.Where(p => !p.IsOverview).ToList();
             Assert.Single(detail, p => p.Tables.Any(t => !t.AsStub && t.Table.Name == "cp_project"));
+            Assert.DoesNotContain(detail, p => p.Tables.Any(t => t.AsStub && t.Table.Name == "cp_project"));
+            Assert.Contains(detail, p => p.Tables.Any(t => t.RowRefs.TryGetValue("cp_projectid", out var refs) && refs.Contains("Project")));
+        }
+
+        [Fact]
+        public void HubsBecomeStubsOnOtherPagesInStubMode()
+        {
+            var (_, pages) = Paginate("project-delivery", new ErdOptions { OffPageLinks = OffPageLinks.Stubs });
+
+            var detail = pages.Where(p => !p.IsOverview).ToList();
+            Assert.Single(detail, p => p.Tables.Any(t => !t.AsStub && t.Table.Name == "cp_project"));
             Assert.Contains(detail, p => p.Tables.Any(t => t.AsStub && t.Table.Name == "cp_project" && t.Note == "see " + HomeOf(detail, "cp_project")));
+        }
+
+        [Fact]
+        public void LookupsFromOtherPagesAreNotDrawnByDefault()
+        {
+            var (_, pages) = Paginate("project-delivery");
+
+            foreach (var page in pages.Where(p => !p.IsOverview))
+            {
+                var full = page.Tables.Where(t => !t.AsStub).Select(t => t.Table.Name).ToList();
+                Assert.All(page.Edges.Where(e => e.Kind == EdgeKind.OneToMany), e => Assert.Contains(e.ChildTable, full));
+            }
         }
 
         [Fact]

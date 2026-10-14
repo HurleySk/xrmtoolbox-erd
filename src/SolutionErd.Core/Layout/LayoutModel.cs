@@ -26,6 +26,9 @@ namespace SolutionErd.Layout
         public string Name { get; set; }
         public string Text { get; set; }
         public string SubText { get; set; }
+
+        /// <summary>"→ Table" for a lookup whose target isn't drawn on the page.</summary>
+        public string Ref { get; set; }
         public string Key { get; set; }
         public bool Bold { get; set; }
 

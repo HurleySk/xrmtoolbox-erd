@@ -12,3 +12,6 @@ Metrics come from `solution-erd render`. Crossings and box hits matter most. The
 | # | Change | Kept? |
 |---|--------|-------|
 | [001](001-baseline.md) | Baseline: Louvain pages, hub stubs, Sugiyama left to right, rectilinear routing | baseline |
+| [002](002-own-lookups-only.md) | A page draws only its own tables' lookups | kept |
+| [003](003-off-page-labels.md) | Off-page lookups as "→ Target" row text instead of stub boxes | kept |
+| [004](004-shortcut-lookups.md) | Denormalised lookups as "→ Target (via X)" row text (004a bug, 004b fix) | 004b kept |

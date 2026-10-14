@@ -48,7 +48,7 @@ namespace SolutionErd
 
                 if (!childIn && !options.ShowExternalChildren) continue;
                 if ((column?.Targets?.Count ?? 1) > options.MaxPolymorphicTargets && !(childIn && parentIn)) continue;
-                if (!(childIn && parentIn) && !options.ShowStubs) continue;
+                if (!(childIn && parentIn) && !options.ShowOutsideTables) continue;
                 if (!seen.Add($"{rel.ChildTable}|{rel.ChildColumn}|{rel.ParentTable}")) continue;
 
                 edges.Add(new DiagramEdge
@@ -78,7 +78,7 @@ namespace SolutionErd
                     if (rules.IsSystemTable(rel.ParentTable) || rules.IsSystemTable(rel.ChildTable)) continue;
                 }
 
-                if (!(aIn && bIn) && !options.ShowStubs) continue;
+                if (!(aIn && bIn) && !options.ShowOutsideTables) continue;
                 if (!seen.Add("nn|" + rel.SchemaName)) continue;
 
                 edges.Add(new DiagramEdge
@@ -97,6 +97,7 @@ namespace SolutionErd
                 Title = snapshot.SolutionDisplayName ?? snapshot.SolutionName,
                 Edges = edges,
             };
+            Shortcuts.Mark(model);
 
             var names = tables.Values.Where(t => t.InSolution && !t.IsIntersect).Select(t => t.LogicalName)
                 .Concat(edges.SelectMany(e => new[] { e.ParentTable, e.ChildTable }))

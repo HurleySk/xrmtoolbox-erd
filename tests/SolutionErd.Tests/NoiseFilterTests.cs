@@ -46,9 +46,9 @@ namespace SolutionErd.Tests
         }
 
         [Fact]
-        public void NoStubsOptionDropsLinesToOutsideTables()
+        public void HidingOutsideTablesDropsTheirLookups()
         {
-            var model = NoiseFilter.Apply(Sample(), new ErdOptions { ShowStubs = false });
+            var model = NoiseFilter.Apply(Sample(), new ErdOptions { ShowOutsideTables = false });
 
             Assert.Null(model.Table("account"));
             Assert.All(model.Edges, e => Assert.True(model.Table(e.ParentTable).InSolution));

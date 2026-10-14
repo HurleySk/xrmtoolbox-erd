@@ -36,6 +36,9 @@ namespace SolutionErd.Model
         public bool ParentRequired { get; set; }
         public string Label { get; set; }
 
+        /// <summary>Set when the parent is also reached through the lookup to this table (see <see cref="Shortcuts"/>).</summary>
+        public string ShortcutVia { get; set; }
+
         public bool IsSelf => ParentTable == ChildTable;
     }
 
@@ -62,6 +65,9 @@ namespace SolutionErd.Model
 
         /// <summary>Shown under a stub's title, e.g. the page that holds the full table.</summary>
         public string Note { get; }
+
+        /// <summary>Lookup rows drawn as text rather than lines: row name to "Target" or "Target (via Other)".</summary>
+        public Dictionary<string, List<string>> RowRefs { get; } = new Dictionary<string, List<string>>();
     }
 
     public sealed class DiagramPage

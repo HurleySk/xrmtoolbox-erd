@@ -17,7 +17,7 @@ namespace SolutionErd
             if (!options.SplitIntoPages || solution.Count <= options.MaxTablesPerPage)
             {
                 var all = new HashSet<string>(solution.Select(t => t.Name));
-                return new List<DiagramPage> { BuildPage(model, model.Title ?? "All tables", all, new Dictionary<string, string>()) };
+                return new List<DiagramPage> { BuildPage(model, model.Title ?? "All tables", all, new Dictionary<string, string>(), options) };
             }
 
             var index = solution.Select((t, i) => (t.Name, i)).ToDictionary(x => x.Name, x => x.i);
@@ -116,7 +116,7 @@ namespace SolutionErd
             for (var p = 0; p < groups.Count; p++)
             {
                 var full = new HashSet<string>(groups[p].Select(i => solution[i].Name));
-                pages.Add(BuildPage(model, pageNames[p], full, homePage));
+                pages.Add(BuildPage(model, pageNames[p], full, homePage, options));
             }
 
             return pages;
@@ -211,16 +211,51 @@ namespace SolutionErd
             return names;
         }
 
-        static DiagramPage BuildPage(DiagramModel model, string name, HashSet<string> full, Dictionary<string, string> homePage)
+        static DiagramPage BuildPage(DiagramModel model, string name, HashSet<string> full, Dictionary<string, string> homePage,
+            ErdOptions options)
         {
-            var edges = model.Edges.Where(e => full.Contains(e.ChildTable) || full.Contains(e.ParentTable)).ToList();
-            var page = new DiagramPage { Name = name, Edges = edges };
+            var page = new DiagramPage { Name = name };
+            var tables = new Dictionary<string, PageTable>();
             foreach (var t in model.Tables.Where(t => full.Contains(t.Name)))
             {
-                page.Tables.Add(new PageTable(t, asStub: false));
+                var pageTable = new PageTable(t, asStub: false);
+                page.Tables.Add(pageTable);
+                tables[t.Name] = pageTable;
             }
 
-            var stubNames = edges.SelectMany(e => new[] { e.ParentTable, e.ChildTable })
+            // A page draws its own tables' lookups. Lookups into it from other pages are drawn on their own pages
+            // unless asked for, so a hub's home page doesn't collect a line from every table that uses it.
+            foreach (var e in model.Edges)
+            {
+                var childHere = full.Contains(e.ChildTable);
+                var parentHere = full.Contains(e.ParentTable);
+                string Name(string table) => model.Table(table)?.DisplayName ?? table;
+                void Label(string text)
+                {
+                    var refs = tables[e.ChildTable].RowRefs;
+                    if (!refs.TryGetValue(e.ChildRow, out var targets)) refs[e.ChildRow] = targets = new List<string>();
+                    targets.Add(text);
+                }
+
+                if (childHere && e.ShortcutVia != null && !options.DrawShortcutLookups)
+                {
+                    Label(Name(e.ParentTable) + " (via " + Name(e.ShortcutVia) + ")");
+                    continue;
+                }
+
+                if (childHere && !parentHere && e.Kind == EdgeKind.OneToMany && options.OffPageLinks == OffPageLinks.Labels)
+                {
+                    Label(Name(e.ParentTable));
+                    continue;
+                }
+
+                if (childHere || (parentHere && (options.ShowIncomingFromOtherPages || e.Kind == EdgeKind.ManyToMany)))
+                {
+                    page.Edges.Add(e);
+                }
+            }
+
+            var stubNames = page.Edges.SelectMany(e => new[] { e.ParentTable, e.ChildTable })
                 .Where(t => !full.Contains(t))
                 .Distinct()
                 .OrderBy(t => t, StringComparer.Ordinal);
