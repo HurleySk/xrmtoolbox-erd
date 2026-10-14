@@ -469,6 +469,29 @@ namespace SolutionErdXrmToolBoxPlugin
                 return true;
             }
 
+            if (document != null && (keyData & Keys.Modifiers) == Keys.Control)
+            {
+                switch (keyData & Keys.KeyCode)
+                {
+                    case Keys.D0:
+                    case Keys.NumPad0:
+                        canvas.FitToWindow = true;
+                        return true;
+                    case Keys.D1:
+                    case Keys.NumPad1:
+                        canvas.SetZoom(1f);
+                        return true;
+                    case Keys.Oemplus:
+                    case Keys.Add:
+                        canvas.ZoomIn();
+                        return true;
+                    case Keys.OemMinus:
+                    case Keys.Subtract:
+                        canvas.ZoomOut();
+                        return true;
+                }
+            }
+
             return base.ProcessCmdKey(ref msg, keyData);
         }
 

@@ -182,7 +182,7 @@ namespace SolutionErdXrmToolBoxPlugin
             this.tslZoom.Name = "tslZoom";
             this.tslZoom.Size = new System.Drawing.Size(44, 22);
             this.tslZoom.Text = "100%";
-            this.tslZoom.ToolTipText = "Zoom. Ctrl+wheel zooms, dragging pans.";
+            this.tslZoom.ToolTipText = "Zoom. Ctrl+wheel zooms, dragging pans, Ctrl+PageUp/PageDown changes page.";
             //
             // tsbZoomIn
             //
@@ -192,7 +192,7 @@ namespace SolutionErdXrmToolBoxPlugin
             this.tsbZoomIn.Name = "tsbZoomIn";
             this.tsbZoomIn.Size = new System.Drawing.Size(23, 22);
             this.tsbZoomIn.Text = "+";
-            this.tsbZoomIn.ToolTipText = "Zoom in (Ctrl+wheel)";
+            this.tsbZoomIn.ToolTipText = "Zoom in (Ctrl++ or Ctrl+wheel)";
             this.tsbZoomIn.Click += new System.EventHandler(this.tsbZoomIn_Click);
             //
             // tsbZoomOut
@@ -203,7 +203,7 @@ namespace SolutionErdXrmToolBoxPlugin
             this.tsbZoomOut.Name = "tsbZoomOut";
             this.tsbZoomOut.Size = new System.Drawing.Size(23, 22);
             this.tsbZoomOut.Text = "−";
-            this.tsbZoomOut.ToolTipText = "Zoom out (Ctrl+wheel)";
+            this.tsbZoomOut.ToolTipText = "Zoom out (Ctrl+- or Ctrl+wheel)";
             this.tsbZoomOut.Click += new System.EventHandler(this.tsbZoomOut_Click);
             //
             // tsbZoomActual
@@ -214,7 +214,7 @@ namespace SolutionErdXrmToolBoxPlugin
             this.tsbZoomActual.Name = "tsbZoomActual";
             this.tsbZoomActual.Size = new System.Drawing.Size(39, 22);
             this.tsbZoomActual.Text = "1:1";
-            this.tsbZoomActual.ToolTipText = "Actual size";
+            this.tsbZoomActual.ToolTipText = "Actual size (Ctrl+1)";
             this.tsbZoomActual.Click += new System.EventHandler(this.tsbZoomActual_Click);
             //
             // tsbZoomFit
@@ -226,7 +226,7 @@ namespace SolutionErdXrmToolBoxPlugin
             this.tsbZoomFit.Name = "tsbZoomFit";
             this.tsbZoomFit.Size = new System.Drawing.Size(26, 22);
             this.tsbZoomFit.Text = "Fit";
-            this.tsbZoomFit.ToolTipText = "Fit the page to the window";
+            this.tsbZoomFit.ToolTipText = "Fit the page to the window (Ctrl+0)";
             this.tsbZoomFit.Click += new System.EventHandler(this.tsbZoomFit_Click);
             //
             // splitMain
