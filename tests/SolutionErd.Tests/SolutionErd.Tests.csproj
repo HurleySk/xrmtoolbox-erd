@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\SolutionErd.Core\SolutionErd.Core.csproj" />
+    <ProjectReference Include="..\..\src\SolutionErdXrmToolBoxPlugin\SolutionErdXrmToolBoxPlugin.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Xml.Linq" />
