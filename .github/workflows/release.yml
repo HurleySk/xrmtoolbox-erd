@@ -98,15 +98,31 @@ jobs:
           name: nupkg
           path: ${{ env.OUTPUT }}/*.nupkg
 
+      # A version uploaded by hand on nuget.org is not pushed again, so the tag still gets its GitHub release
+      - name: Check whether this version is already on nuget.org
+        id: published
+        if: startsWith(github.ref, 'refs/tags/v') && inputs.dry_run != true
+        shell: pwsh
+        run: |
+          $version = '${{ steps.version.outputs.version }}'
+          try {
+            $index = Invoke-RestMethod 'https://api.nuget.org/v3-flatcontainer/solutionerdxrmtoolboxplugin/index.json'
+            $exists = $index.versions -contains $version
+          } catch {
+            $exists = $false
+          }
+          "exists=$($exists.ToString().ToLower())" >> $env:GITHUB_OUTPUT
+          Write-Host "Version $version on nuget.org: $exists"
+
       - name: NuGet login
         id: login
-        if: startsWith(github.ref, 'refs/tags/v') && inputs.dry_run != true
+        if: startsWith(github.ref, 'refs/tags/v') && inputs.dry_run != true && steps.published.outputs.exists != 'true'
         uses: NuGet/login@v1
         with:
           user: HurleySk
 
       - name: Push to NuGet
-        if: startsWith(github.ref, 'refs/tags/v') && inputs.dry_run != true
+        if: startsWith(github.ref, 'refs/tags/v') && inputs.dry_run != true && steps.published.outputs.exists != 'true'
         shell: pwsh
         run: dotnet nuget push "$env:OUTPUT\*.nupkg" --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 

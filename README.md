@@ -113,7 +113,7 @@ src\SolutionErd.Cli\bin\Release\net48\solution-erd.exe render fixtures\synthetic
 
 ### Releasing
 
-Set the version in `src/SolutionErdXrmToolBoxPlugin/SolutionErdXrmToolBoxPlugin.csproj` and `Properties/AssemblyInfo.cs` (four parts, last part not zero), update `PackageReleaseNotes`, push, then push a tag `v<version>`. The Release workflow builds, tests, checks the versions and the package layout, publishes to nuget.org with trusted publishing and creates a GitHub release. Run it by hand with "dry run" to check a build without publishing.
+Set the version in `src/SolutionErdXrmToolBoxPlugin/SolutionErdXrmToolBoxPlugin.csproj` and `Properties/AssemblyInfo.cs` (four parts, last part not zero), update `PackageReleaseNotes`, push, then push a tag `v<version>`. The Release workflow builds, tests, checks the versions and the package layout, publishes to nuget.org with trusted publishing and creates a GitHub release. A version already on nuget.org (uploaded by hand, say) is not pushed again; the workflow only creates the release. Run it by hand with "dry run" to check a build without publishing.
 
 The plugin DLL goes in `Plugins/`; `SolutionErd.Core.dll` and `AutomaticGraphLayout.dll` go in `Plugins/Dependencies/`.
 
